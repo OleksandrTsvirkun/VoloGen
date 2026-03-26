@@ -1,0 +1,7 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+## run commit-msg linter
+husky run --args "$1" --group commit-msg
+
+dotnet commit-lint --msg-file $1
