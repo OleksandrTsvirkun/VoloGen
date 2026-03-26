@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>14.0</LangVersion>
+    <Description>Marker attribute for the VoloGen formattable source generator. Annotate a partial type with [AutoFormattable] to generate IFormattable, ISpanFormattable, and optional IUtf8SpanFormattable implementations.</Description>
+    <PackageId>VoloGen.Formattable</PackageId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>
+

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- VG0001: MissingTryParseMethod -->
+  <data name="VG0001_Title" xml:space="preserve">
+    <value>Missing TryParse method</value>
+  </data>
+  <data name="VG0001_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with [AutoParsable] but does not define a 'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out {0})' method</value>
+  </data>
+  <data name="VG0001_Description" xml:space="preserve">
+    <value>The [AutoParsable] attribute requires a user-defined 'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out T)' core method to generate the remaining IParsable&lt;T&gt; and ISpanParsable&lt;T&gt; overloads.</value>
+  </data>
+
+  <!-- VG0002: MustBePartial -->
+  <data name="VG0002_Title" xml:space="preserve">
+    <value>Type must be partial</value>
+  </data>
+  <data name="VG0002_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' must be declared as partial to use the [{1}] attribute</value>
+  </data>
+  <data name="VG0002_Description" xml:space="preserve">
+    <value>ValuGen source generators require the type to be partial so the generated code can be added as another partial declaration.</value>
+  </data>
+
+  <!-- VG0003: CannotBeStatic -->
+  <data name="VG0003_Title" xml:space="preserve">
+    <value>Type cannot be static</value>
+  </data>
+  <data name="VG0003_MessageFormat" xml:space="preserve">
+    <value>Static type '{0}' cannot use the [{1}] attribute; remove the 'static' modifier</value>
+  </data>
+  <data name="VG0003_Description" xml:space="preserve">
+    <value>ValuGen source generators cannot generate instance members for static types.</value>
+  </data>
+
+  <!-- VG0004: CannotBeAbstract -->
+  <data name="VG0004_Title" xml:space="preserve">
+    <value>Type cannot be abstract</value>
+  </data>
+  <data name="VG0004_MessageFormat" xml:space="preserve">
+    <value>Abstract type '{0}' cannot use the [{1}] attribute; remove the 'abstract' modifier</value>
+  </data>
+  <data name="VG0004_Description" xml:space="preserve">
+    <value>ValuGen source generators cannot generate interface implementations for abstract types.</value>
+  </data>
+
+  <!-- VG0005: MissingCompareMethod -->
+  <data name="VG0005_Title" xml:space="preserve">
+    <value>Missing Compare method</value>
+  </data>
+  <data name="VG0005_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with [AutoComparable] but does not define a 'static int Compare({0}, {0})' method</value>
+  </data>
+  <data name="VG0005_Description" xml:space="preserve">
+    <value>The [AutoComparable] attribute requires a user-defined 'static int Compare(T, T)' core method to generate the remaining IComparable&lt;T&gt;, IComparable, and comparison operator overloads.</value>
+  </data>
+
+  <!-- VG0006: MissingEqualMethods -->
+  <data name="VG0006_Title" xml:space="preserve">
+    <value>Missing Equal/GetHashCode methods</value>
+  </data>
+  <data name="VG0006_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with [AutoEquality] but does not define both 'static bool Equal({0}, {0})' and 'override int GetHashCode()' methods</value>
+  </data>
+  <data name="VG0006_Description" xml:space="preserve">
+    <value>The [AutoEquality] attribute requires both 'static bool Equal(T, T)' and 'override int GetHashCode()' methods to generate IEquatable&lt;T&gt; and equality operator overloads.</value>
+  </data>
+
+  <!-- VG0007: MissingTryFormatMethod -->
+  <data name="VG0007_Title" xml:space="preserve">
+    <value>Missing TryFormat method</value>
+  </data>
+  <data name="VG0007_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with [AutoFormattable] but does not define a 'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' method</value>
+  </data>
+  <data name="VG0007_Description" xml:space="preserve">
+    <value>The [AutoFormattable] attribute requires a user-defined 'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' core method to generate the remaining IFormattable and ISpanFormattable overloads.</value>
+  </data>
+
+  <!-- VG0008: MissingToStringOrMaxBufferSize -->
+  <data name="VG0008_Title" xml:space="preserve">
+    <value>Missing ToString or MaxBufferSize</value>
+  </data>
+  <data name="VG0008_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' is marked with [AutoFormattable] but does not define 'string ToString(string?, IFormatProvider?)' and has no 'const int MaxBufferSize' field</value>
+  </data>
+  <data name="VG0008_Description" xml:space="preserve">
+    <value>The [AutoFormattable] attribute requires either a user-defined 'string ToString(string?, IFormatProvider?)' method or a 'const int MaxBufferSize' field to generate the ToString overload using stackalloc or ArrayPool.</value>
+  </data>
+
+  <!-- Exception messages -->
+  <data name="ExceptionMessage_InvalidFormat" xml:space="preserve">
+    <value>Input string was not in a correct format for type '{0}'.</value>
+  </data>
+
+</root>

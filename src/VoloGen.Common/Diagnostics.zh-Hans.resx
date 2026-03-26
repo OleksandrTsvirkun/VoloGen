@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- VG0001 -->
+  <data name="VG0001_Title" xml:space="preserve">
+    <value>缺少 TryParse 方法</value>
+  </data>
+  <data name="VG0001_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 标记了 [AutoParsable]，但未定义 'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out {0})' 方法</value>
+  </data>
+  <data name="VG0001_Description" xml:space="preserve">
+    <value>[AutoParsable] 特性需要用户定义的核心方法 'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out T)' 来生成其余的 IParsable&lt;T&gt; 和 ISpanParsable&lt;T&gt; 重载。</value>
+  </data>
+
+  <!-- VG0002 -->
+  <data name="VG0002_Title" xml:space="preserve">
+    <value>类型必须是 partial</value>
+  </data>
+  <data name="VG0002_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 必须声明为 partial 才能使用 [{1}] 特性</value>
+  </data>
+  <data name="VG0002_Description" xml:space="preserve">
+    <value>ValuGen 源代码生成器要求类型为 partial，以便将生成的代码添加为另一个分部声明。</value>
+  </data>
+
+  <!-- VG0003 -->
+  <data name="VG0003_Title" xml:space="preserve">
+    <value>类型不能是 static</value>
+  </data>
+  <data name="VG0003_MessageFormat" xml:space="preserve">
+    <value>静态类型 '{0}' 不能使用 [{1}] 特性；请移除 'static' 修饰符</value>
+  </data>
+  <data name="VG0003_Description" xml:space="preserve">
+    <value>ValuGen 源代码生成器无法为静态类型生成实例成员。</value>
+  </data>
+
+  <!-- VG0004 -->
+  <data name="VG0004_Title" xml:space="preserve">
+    <value>类型不能是 abstract</value>
+  </data>
+  <data name="VG0004_MessageFormat" xml:space="preserve">
+    <value>抽象类型 '{0}' 不能使用 [{1}] 特性；请移除 'abstract' 修饰符</value>
+  </data>
+  <data name="VG0004_Description" xml:space="preserve">
+    <value>ValuGen 源代码生成器无法为抽象类型生成接口实现。</value>
+  </data>
+
+  <!-- VG0005 -->
+  <data name="VG0005_Title" xml:space="preserve">
+    <value>缺少 Compare 方法</value>
+  </data>
+  <data name="VG0005_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 标记了 [AutoComparable]，但未定义 'static int Compare({0}, {0})' 方法</value>
+  </data>
+  <data name="VG0005_Description" xml:space="preserve">
+    <value>[AutoComparable] 特性需要用户定义的核心方法 'static int Compare(T, T)' 来生成其余的 IComparable&lt;T&gt;、IComparable 和比较运算符重载。</value>
+  </data>
+
+  <!-- VG0006 -->
+  <data name="VG0006_Title" xml:space="preserve">
+    <value>缺少 Equal/GetHashCode 方法</value>
+  </data>
+  <data name="VG0006_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 标记了 [AutoEquality]，但未同时定义 'static bool Equal({0}, {0})' 和 'override int GetHashCode()' 方法</value>
+  </data>
+  <data name="VG0006_Description" xml:space="preserve">
+    <value>[AutoEquality] 特性需要 'static bool Equal(T, T)' 和 'override int GetHashCode()' 方法来生成 IEquatable&lt;T&gt; 和等式运算符重载。</value>
+  </data>
+
+  <!-- VG0007 -->
+  <data name="VG0007_Title" xml:space="preserve">
+    <value>缺少 TryFormat 方法</value>
+  </data>
+  <data name="VG0007_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 标记了 [AutoFormattable]，但未定义 'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' 方法</value>
+  </data>
+  <data name="VG0007_Description" xml:space="preserve">
+    <value>[AutoFormattable] 特性需要用户定义的核心方法 'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' 来生成其余的 IFormattable 和 ISpanFormattable 重载。</value>
+  </data>
+
+  <!-- VG0008 -->
+  <data name="VG0008_Title" xml:space="preserve">
+    <value>缺少 ToString 或 MaxBufferSize</value>
+  </data>
+  <data name="VG0008_MessageFormat" xml:space="preserve">
+    <value>类型 '{0}' 标记了 [AutoFormattable]，但未定义 'string ToString(string?, IFormatProvider?)' 且没有 'const int MaxBufferSize' 字段</value>
+  </data>
+  <data name="VG0008_Description" xml:space="preserve">
+    <value>[AutoFormattable] 特性需要用户定义的方法 'string ToString(string?, IFormatProvider?)' 或字段 'const int MaxBufferSize' 来使用 stackalloc 或 ArrayPool 生成 ToString 重载。</value>
+  </data>
+
+  <!-- Exception messages -->
+  <data name="ExceptionMessage_InvalidFormat" xml:space="preserve">
+    <value>输入字符串不是类型 '{0}' 的正确格式。</value>
+  </data>
+
+</root>

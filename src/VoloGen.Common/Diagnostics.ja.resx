@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- VG0001 -->
+  <data name="VG0001_Title" xml:space="preserve">
+    <value>TryParseメソッドがありません</value>
+  </data>
+  <data name="VG0001_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' に [AutoParsable] が付与されていますが、'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out {0})' メソッドが定義されていません</value>
+  </data>
+  <data name="VG0001_Description" xml:space="preserve">
+    <value>[AutoParsable] 属性は、残りの IParsable&lt;T&gt; および ISpanParsable&lt;T&gt; オーバーロードを生成するために、ユーザー定義のコアメソッド 'static bool TryParse(ReadOnlySpan&lt;char&gt;, IFormatProvider?, out T)' を必要とします。</value>
+  </data>
+
+  <!-- VG0002 -->
+  <data name="VG0002_Title" xml:space="preserve">
+    <value>型は partial である必要があります</value>
+  </data>
+  <data name="VG0002_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' は [{1}] 属性を使用するために partial として宣言する必要があります</value>
+  </data>
+  <data name="VG0002_Description" xml:space="preserve">
+    <value>ValuGen ソースジェネレーターは、生成されたコードを別の部分宣言として追加できるように、型が partial であることを要求します。</value>
+  </data>
+
+  <!-- VG0003 -->
+  <data name="VG0003_Title" xml:space="preserve">
+    <value>型は static にできません</value>
+  </data>
+  <data name="VG0003_MessageFormat" xml:space="preserve">
+    <value>静的型 '{0}' は [{1}] 属性を使用できません。'static' 修飾子を削除してください</value>
+  </data>
+  <data name="VG0003_Description" xml:space="preserve">
+    <value>ValuGen ソースジェネレーターは、静的型に対してインスタンスメンバーを生成できません。</value>
+  </data>
+
+  <!-- VG0004 -->
+  <data name="VG0004_Title" xml:space="preserve">
+    <value>型は abstract にできません</value>
+  </data>
+  <data name="VG0004_MessageFormat" xml:space="preserve">
+    <value>抽象型 '{0}' は [{1}] 属性を使用できません。'abstract' 修飾子を削除してください</value>
+  </data>
+  <data name="VG0004_Description" xml:space="preserve">
+    <value>ValuGen ソースジェネレーターは、抽象型に対してインターフェース実装を生成できません。</value>
+  </data>
+
+  <!-- VG0005 -->
+  <data name="VG0005_Title" xml:space="preserve">
+    <value>Compareメソッドがありません</value>
+  </data>
+  <data name="VG0005_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' に [AutoComparable] が付与されていますが、'static int Compare({0}, {0})' メソッドが定義されていません</value>
+  </data>
+  <data name="VG0005_Description" xml:space="preserve">
+    <value>[AutoComparable] 属性は、残りの IComparable&lt;T&gt;、IComparable、および比較演算子のオーバーロードを生成するために、ユーザー定義のコアメソッド 'static int Compare(T, T)' を必要とします。</value>
+  </data>
+
+  <!-- VG0006 -->
+  <data name="VG0006_Title" xml:space="preserve">
+    <value>Equal/GetHashCodeメソッドがありません</value>
+  </data>
+  <data name="VG0006_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' に [AutoEquality] が付与されていますが、'static bool Equal({0}, {0})' と 'override int GetHashCode()' の両メソッドが定義されていません</value>
+  </data>
+  <data name="VG0006_Description" xml:space="preserve">
+    <value>[AutoEquality] 属性は、IEquatable&lt;T&gt; および等値演算子のオーバーロードを生成するために、'static bool Equal(T, T)' と 'override int GetHashCode()' の両メソッドを必要とします。</value>
+  </data>
+
+  <!-- VG0007 -->
+  <data name="VG0007_Title" xml:space="preserve">
+    <value>TryFormatメソッドがありません</value>
+  </data>
+  <data name="VG0007_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' に [AutoFormattable] が付与されていますが、'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' メソッドが定義されていません</value>
+  </data>
+  <data name="VG0007_Description" xml:space="preserve">
+    <value>[AutoFormattable] 属性は、残りの IFormattable および ISpanFormattable オーバーロードを生成するために、ユーザー定義のコアメソッド 'bool TryFormat(Span&lt;char&gt;, out int, ReadOnlySpan&lt;char&gt;, IFormatProvider?)' を必要とします。</value>
+  </data>
+
+  <!-- VG0008 -->
+  <data name="VG0008_Title" xml:space="preserve">
+    <value>ToStringまたはMaxBufferSizeがありません</value>
+  </data>
+  <data name="VG0008_MessageFormat" xml:space="preserve">
+    <value>型 '{0}' に [AutoFormattable] が付与されていますが、'string ToString(string?, IFormatProvider?)' が定義されておらず、'const int MaxBufferSize' フィールドもありません</value>
+  </data>
+  <data name="VG0008_Description" xml:space="preserve">
+    <value>[AutoFormattable] 属性は、stackalloc または ArrayPool を使用した ToString オーバーロードを生成するために、ユーザー定義のメソッド 'string ToString(string?, IFormatProvider?)' またはフィールド 'const int MaxBufferSize' を必要とします。</value>
+  </data>
+
+  <!-- Exception messages -->
+  <data name="ExceptionMessage_InvalidFormat" xml:space="preserve">
+    <value>入力文字列は型 '{0}' の正しい形式ではありませんでした。</value>
+  </data>
+
+</root>
