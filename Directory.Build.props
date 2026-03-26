@@ -1,0 +1,34 @@
+<Project>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <LangVersion>14.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Authors>Oleksandr Tsvirkun</Authors>
+    <Company>VoloGen</Company>
+    <Product>VoloGen</Product>
+    <Copyright>Copyright © Oleksandr Tsvirkun 2026</Copyright>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/OleksandrTsvirkun/VoloGen</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/OleksandrTsvirkun/VoloGen</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>source-generator;roslyn;value-object;parsable;formattable;comparable;equality;ddd</PackageTags>
+  </PropertyGroup>
+
+  <!-- Strong-name signing -->
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(MSBuildThisFileDirectory)VoloGen.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+</Project>
+
