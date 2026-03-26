@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>14.0</LangVersion>
+    <Description>Marker attribute for the VoloGen parsable source generator. Annotate a partial type with [AutoParsable] to generate IParsable&lt;T&gt;, ISpanParsable&lt;T&gt;, and optional IUtf8SpanParsable&lt;T&gt; implementations.</Description>
+    <PackageId>VoloGen.Parsable</PackageId>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+</Project>
+

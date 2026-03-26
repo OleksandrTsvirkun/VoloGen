@@ -1,0 +1,31 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".gitignore" />
+    <File Path="CHANGELOG.md" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/VoloGen.Common/VoloGen.Common.csproj" />
+    <Project Path="src/VoloGen.Comparable.Generator/VoloGen.Comparable.Generator.csproj" />
+    <Project Path="src/VoloGen.Comparable/VoloGen.Comparable.csproj" />
+    <Project Path="src/VoloGen.Equality.Generator/VoloGen.Equality.Generator.csproj" />
+    <Project Path="src/VoloGen.Equality/VoloGen.Equality.csproj" />
+    <Project Path="src/VoloGen.Formattable.Generator/VoloGen.Formattable.Generator.csproj" />
+    <Project Path="src/VoloGen.Formattable/VoloGen.Formattable.csproj" />
+    <Project Path="src/VoloGen.Parsable.Generator/VoloGen.Parsable.Generator.csproj" />
+    <Project Path="src/VoloGen.Parsable/VoloGen.Parsable.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/VoloGen.Combinations.Tests/VoloGen.Combinations.Tests.csproj" />
+    <Project Path="tests/VoloGen.Comparable.Tests/VoloGen.Comparable.Tests.csproj" />
+    <Project Path="tests/VoloGen.Equality.Tests/VoloGen.Equality.Tests.csproj" />
+    <Project Path="tests/VoloGen.Formattable.Tests/VoloGen.Formattable.Tests.csproj" />
+    <Project Path="tests/VoloGen.Parsable.Tests/VoloGen.Parsable.Tests.csproj" />
+  </Folder>
+</Solution>
+
