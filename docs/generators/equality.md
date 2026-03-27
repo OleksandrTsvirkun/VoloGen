@@ -3,9 +3,7 @@ title: AutoEquality
 permalink: /generators/equality/
 ---
 
-# AutoEquality
-
-Generates `IEquatable<T>`, `Equals(object?)`, `GetHashCode()`, and `==` / `!=` operators from a user-defined core equality method.
+Generates `IEquatable<T>`
 
 ---
 

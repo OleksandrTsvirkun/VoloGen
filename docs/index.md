@@ -1,10 +1,8 @@
 ﻿---
-title: Home
+title: VoloGen
 description: "VoloGen -- Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET."
 permalink: /
 ---
-
-# VoloGen
 
 Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET.
 
