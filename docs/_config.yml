@@ -14,18 +14,10 @@ footer_content: >-
 
 kramdown:
   toc_levels: "2..3"
-  tip:
-    title: Tip
-    color: green
-  warning:
-    title: Warning
-    color: yellow
-  important:
-    title: Important
-    color: red
 
 # Exclude
 exclude:
   - Gemfile
   - Gemfile.lock
+  - vendor
   - "*.gemspec"
