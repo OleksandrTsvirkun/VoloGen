@@ -3,9 +3,7 @@ title: AutoFormattable
 permalink: /generators/formattable/
 ---
 
-# AutoFormattable
-
-Generates `IFormattable`, `ISpanFormattable`, and optionally `IUtf8SpanFormattable` from a user-defined core `TryFormat` method.
+Generates `IFormattable`
 
 ---
 

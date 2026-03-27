@@ -3,8 +3,6 @@ title: Diagnostics
 permalink: /diagnostics/
 ---
 
-# Diagnostics
-
 All VoloGen diagnostics use the **VoloGen** category and are **errors** by default. Diagnostic messages are localized via `.resx` resource files.
 
 ---

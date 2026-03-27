@@ -3,9 +3,7 @@ title: AutoComparable
 permalink: /generators/comparable/
 ---
 
-# AutoComparable
-
-Generates `IComparable<T>`, `IComparable`, and all comparison and equality operators from a user-defined core comparison method.
+Generates `IComparable<T>`
 
 ---
 
