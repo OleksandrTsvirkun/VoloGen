@@ -1,10 +1,11 @@
-name: Deploy Documentation
+﻿name: Deploy Documentation
 
 on:
   push:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'CHANGELOG.md'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +36,11 @@ jobs:
           ruby-version: '3.3'
           bundler-cache: true
           working-directory: docs
+
+      - name: Generate changelog page
+        run: |
+          printf -- '---\ntitle: Changelog\npermalink: /changelog/\n---\n\n' > changelog.md
+          cat ../CHANGELOG.md >> changelog.md
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/VoloGen"
