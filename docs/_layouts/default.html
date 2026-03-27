@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+  <meta name="description" content="{{ page.description | default: site.description }}">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-title">
+        <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+        <p>{{ site.description }}</p>
+      </div>
+      <nav class="header-links">
+        <a href="https://github.com/OleksandrTsvirkun/VoloGen">GitHub</a>
+        <a href="https://www.nuget.org/profiles/oleksandr.tsvirkun">NuGet</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="wrapper">
+    <nav class="sidebar" id="sidebar">
+      <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">&#9776; Menu</button>
+      <div class="sidebar-content" id="sidebar-content">
+        {% include nav.html %}
+      </div>
+    </nav>
+
+    <main class="content" id="content">
+      {{ content }}
+    </main>
+
+    <aside class="toc" id="toc-sidebar">
+      <div class="toc-header">On this page</div>
+      <ul class="toc-list" id="toc-list"></ul>
+    </aside>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <p>{{ site.footer_content }}</p>
+    </div>
+  </footer>
+
+  <script src="{{ '/assets/js/toc.js' | relative_url }}"></script>
+</body>
+</html>

@@ -1,20 +1,12 @@
----
+﻿---
 title: FAQ
 layout: default
 nav_order: 9
 ---
 
 # FAQ
-{: .no_toc }
 
 Frequently asked questions about VoloGen.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 

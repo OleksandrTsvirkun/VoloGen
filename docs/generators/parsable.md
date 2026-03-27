@@ -1,4 +1,4 @@
----
+﻿---
 title: AutoParsable
 layout: default
 parent: Generators
@@ -6,16 +6,8 @@ nav_order: 3
 ---
 
 # AutoParsable
-{: .no_toc }
 
 Generates `IParsable<T>`, `ISpanParsable<T>`, and optionally `IUtf8SpanParsable<T>` from a user-defined core `TryParse` method.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 

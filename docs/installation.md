@@ -1,17 +1,10 @@
----
+﻿---
 title: Installation
 layout: default
 nav_order: 4
 ---
 
 # Installation
-{: .no_toc }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 
@@ -58,8 +51,7 @@ dotnet add package VoloGen.Formattable.Generator
 </ItemGroup>
 ```
 
-{: .note }
-The generator package must be referenced with `OutputItemType="Analyzer"` and `ReferenceOutputAssembly="false"` so it runs at compile time without being included as a runtime dependency.
+> The generator package must be referenced with `OutputItemType="Analyzer"` and `ReferenceOutputAssembly="false"` so it runs at compile time without being included as a runtime dependency.
 
 ## Compatibility
 

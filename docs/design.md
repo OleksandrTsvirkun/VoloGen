@@ -1,20 +1,12 @@
----
+﻿---
 title: Design Principles
 layout: default
 nav_order: 6
 ---
 
 # Design Principles
-{: .no_toc }
 
 This page explains the architectural decisions behind VoloGen's source generators.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 
@@ -52,8 +44,7 @@ Before emitting any method, each generator checks whether an identical overload 
 
 If a match is found, the generator silently skips that method. This means you can always override any generated method by defining your own implementation.
 
-{: .tip }
-This design makes VoloGen safe to adopt incrementally. You can start with full generation and later customize individual methods without breaking anything.
+> This design makes VoloGen safe to adopt incrementally. You can start with full generation and later customize individual methods without breaking anything.
 
 ---
 

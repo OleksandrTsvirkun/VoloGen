@@ -1,4 +1,4 @@
----
+﻿---
 title: AutoEquality
 layout: default
 parent: Generators
@@ -6,16 +6,8 @@ nav_order: 1
 ---
 
 # AutoEquality
-{: .no_toc }
 
 Generates `IEquatable<T>`, `Equals(object?)`, `GetHashCode()`, and `==` / `!=` operators from a user-defined core equality method.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 
@@ -45,8 +37,7 @@ The annotated type **must**:
 | `operator ==(T, T)` | `Equal(left, right)` |
 | `operator !=(T, T)` | `!Equal(left, right)` |
 
-{: .note }
-If `[AutoComparable]` is also present on the same type, the `==` and `!=` operators are emitted by the comparable generator instead to avoid duplicate declarations.
+> If `[AutoComparable]` is also present on the same type, the `==` and `!=` operators are emitted by the comparable generator instead to avoid duplicate declarations.
 
 ## Example
 
