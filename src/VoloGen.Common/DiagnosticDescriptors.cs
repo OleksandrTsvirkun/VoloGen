@@ -1,5 +1,6 @@
+﻿using Microsoft.CodeAnalysis;
+
 using System.Resources;
-using Microsoft.CodeAnalysis;
 
 namespace VoloGen.Common;
 

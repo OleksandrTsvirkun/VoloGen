@@ -1,10 +1,12 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Testing;
+
 using VoloGen.Comparable;
 using VoloGen.Equality;
 using VoloGen.Formattable;
 using VoloGen.Parsable;
+
 using Xunit;
 
 namespace VoloGen.Combinations.Tests;

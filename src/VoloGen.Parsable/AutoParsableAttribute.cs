@@ -1,4 +1,4 @@
-namespace VoloGen;
+﻿namespace VoloGen;
 
 /// <summary>
 /// Marks a partial struct or class for automatic parsing code generation.

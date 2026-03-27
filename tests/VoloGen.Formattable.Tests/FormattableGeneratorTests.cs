@@ -1,8 +1,10 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
+
 using VoloGen.Common;
 using VoloGen.Formattable;
+
 using Xunit;
 
 namespace VoloGen.Formattable.Tests;
