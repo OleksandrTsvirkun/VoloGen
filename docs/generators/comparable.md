@@ -1,4 +1,4 @@
----
+﻿---
 title: AutoComparable
 layout: default
 parent: Generators
@@ -6,16 +6,8 @@ nav_order: 2
 ---
 
 # AutoComparable
-{: .no_toc }
 
 Generates `IComparable<T>`, `IComparable`, and all comparison and equality operators from a user-defined core comparison method.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 
@@ -48,8 +40,7 @@ The annotated type **must**:
 | `operator ==(T, T)` | `Compare(left, right) == 0` |
 | `operator !=(T, T)` | `Compare(left, right) != 0` |
 
-{: .note }
-When `[AutoEquality]` is also present, this generator takes ownership of `==` and `!=` so they delegate to `Compare` rather than `Equal`. This avoids duplicate operator declarations.
+> When `[AutoEquality]` is also present, this generator takes ownership of `==` and `!=` so they delegate to `Compare` rather than `Equal`. This avoids duplicate operator declarations.
 
 ## Example
 

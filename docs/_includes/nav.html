@@ -1,0 +1,28 @@
+﻿<ul class="nav-list">
+  {% assign top_pages = site.pages
+    | where_exp: "p", "p.nav_order"
+    | where_exp: "p", "p.parent == nil"
+    | where_exp: "p", "p.nav_exclude != true"
+    | sort: "nav_order" %}
+  {% for p in top_pages %}
+    <li>
+      <a href="{{ p.url | relative_url }}"
+         {% if page.url == p.url or page.parent == p.title %}class="active"{% endif %}>
+        {{ p.title }}
+      </a>
+      {% if p.has_children %}
+        {% assign children = site.pages | where: "parent", p.title | sort: "nav_order" %}
+        <ul class="nav-children">
+          {% for child in children %}
+            <li>
+              <a href="{{ child.url | relative_url }}"
+                 {% if page.url == child.url %}class="active"{% endif %}>
+                {{ child.title }}
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

@@ -1,4 +1,4 @@
----
+﻿---
 title: AutoFormattable
 layout: default
 parent: Generators
@@ -6,16 +6,8 @@ nav_order: 4
 ---
 
 # AutoFormattable
-{: .no_toc }
 
 Generates `IFormattable`, `ISpanFormattable`, and optionally `IUtf8SpanFormattable` from a user-defined core `TryFormat` method.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 

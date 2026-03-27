@@ -1,19 +1,16 @@
----
+﻿---
 title: Home
-layout: home
+layout: default
 nav_order: 1
 description: "VoloGen -- Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET."
 permalink: /
 ---
 
 # VoloGen
-{: .fs-9 }
 
 Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET.
-{: .fs-6 .fw-300 }
 
-[Get Started](#quick-start){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
-[View on GitHub](https://github.com/OleksandrTsvirkun/VoloGen){: .btn .fs-5 .mb-4 .mb-md-0 }
+[Get Started](#quick-start) \| [View on GitHub](https://github.com/OleksandrTsvirkun/VoloGen)
 
 ---
 
@@ -96,7 +93,6 @@ Each generator follows the **core method delegation** pattern:
 
 This means you write the business logic once, and the generator handles the tedious boilerplate -- including null checks, span conversions, operator definitions, and interface compliance.
 
-{: .note }
 > All generated thin-wrapper overloads are annotated with `[MethodImpl(MethodImplOptions.AggressiveInlining)]` for optimal performance.
 
 ---

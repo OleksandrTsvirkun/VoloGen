@@ -1,20 +1,12 @@
----
+﻿---
 title: Samples
 layout: default
 nav_order: 7
 ---
 
 # Samples
-{: .no_toc }
 
 The repository includes runnable sample projects under `samples/` that demonstrate each generator in action.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 

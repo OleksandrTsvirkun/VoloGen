@@ -1,20 +1,12 @@
----
+﻿---
 title: Contributing
 layout: default
 nav_order: 5
 ---
 
 # Contributing
-{: .no_toc }
 
 Thank you for your interest in contributing to VoloGen! This page covers everything you need to get started.
-{: .fs-5 .fw-300 }
-
-## Table of contents
-{: .no_toc .text-delta }
-
-1. TOC
-{:toc}
 
 ---
 
