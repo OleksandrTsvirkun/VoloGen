@@ -6,6 +6,7 @@ on:
     paths:
       - 'docs/**'
       - 'CHANGELOG.md'
+      - 'CONTRIBUTING.md'
   workflow_dispatch:
 
 permissions:
@@ -41,6 +42,11 @@ jobs:
         run: |
           printf -- '---\ntitle: Changelog\npermalink: /changelog/\n---\n\n' > changelog.md
           cat ../CHANGELOG.md >> changelog.md
+
+      - name: Generate contributing page
+        run: |
+          printf -- '---\ntitle: Contributing\npermalink: /contributing/\n---\n\n' > contributing.md
+          cat ../CONTRIBUTING.md >> contributing.md
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/VoloGen"
