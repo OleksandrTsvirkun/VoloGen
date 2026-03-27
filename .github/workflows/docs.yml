@@ -41,12 +41,12 @@ jobs:
       - name: Generate changelog page
         run: |
           printf -- '---\ntitle: Changelog\npermalink: /changelog/\n---\n\n' > changelog.md
-          cat ../CHANGELOG.md >> changelog.md
+          tail -n +2 ../CHANGELOG.md >> changelog.md
 
       - name: Generate contributing page
         run: |
           printf -- '---\ntitle: Contributing\npermalink: /contributing/\n---\n\n' > contributing.md
-          cat ../CONTRIBUTING.md >> contributing.md
+          tail -n +2 ../CONTRIBUTING.md >> contributing.md
 
       - name: Build with Jekyll
         run: bundle exec jekyll build --baseurl "/VoloGen"
