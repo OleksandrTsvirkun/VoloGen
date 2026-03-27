@@ -15,7 +15,7 @@ If you discover a security vulnerability in VoloGen, **please do not open a publ
 
 Instead, report it privately:
 
-1. **Email**: Send details to **oleksandr.tsvirkun@gmail.com**
+1. **Email**: Send details to **oleksandr.tsvirkun@outlook.com**
 2. **GitHub**: Use [GitHub Security Advisories](https://github.com/OleksandrTsvirkun/VoloGen/security/advisories/new) to report privately
 
 ### What to include

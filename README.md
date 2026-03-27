@@ -1,7 +1,7 @@
-﻿# VoloGen
+# VoloGen
 
 [![CI](https://github.com/OleksandrTsvirkun/VoloGen/actions/workflows/ci.yml/badge.svg)](https://github.com/OleksandrTsvirkun/VoloGen/actions/workflows/ci.yml)
-[![NuGet](https://img.shields.io/nuget/v/VoloGen.Parsable?color=blue&label=NuGet)](https://www.nuget.org/profiles/OleksandrTsvirkun)
+[![NuGet](https://img.shields.io/nuget/v/VoloGen.Parsable?color=blue&label=NuGet)](https://www.nuget.org/profiles/oleksandr.tsvirkun)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-blue)](https://oleksandrtsvirkun.github.io/VoloGen/)
 
