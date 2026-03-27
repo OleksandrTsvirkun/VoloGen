@@ -1,7 +1,5 @@
 ﻿---
 title: Home
-layout: default
-nav_order: 1
 description: "VoloGen -- Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET."
 permalink: /
 ---

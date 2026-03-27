@@ -1,7 +1,6 @@
 ﻿---
 title: Samples
-layout: default
-nav_order: 7
+permalink: /samples/
 ---
 
 # Samples

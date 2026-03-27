@@ -1,7 +1,6 @@
 ﻿---
 title: FAQ
-layout: default
-nav_order: 9
+permalink: /faq/
 ---
 
 # FAQ

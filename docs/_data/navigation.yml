@@ -1,0 +1,35 @@
+﻿docs:
+  - title: Getting Started
+    children:
+      - title: "Home"
+        url: /
+      - title: "Installation"
+        url: /installation/
+  - title: Generators
+    children:
+      - title: "Overview"
+        url: /generators/
+      - title: "AutoEquality"
+        url: /generators/equality/
+      - title: "AutoComparable"
+        url: /generators/comparable/
+      - title: "AutoParsable"
+        url: /generators/parsable/
+      - title: "AutoFormattable"
+        url: /generators/formattable/
+  - title: Reference
+    children:
+      - title: "Diagnostics"
+        url: /diagnostics/
+      - title: "Design Principles"
+        url: /design/
+      - title: "Samples"
+        url: /samples/
+  - title: Community
+    children:
+      - title: "Contributing"
+        url: /contributing/
+      - title: "Changelog"
+        url: /changelog/
+      - title: "FAQ"
+        url: /faq/

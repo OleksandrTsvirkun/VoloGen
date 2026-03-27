@@ -1,19 +1,40 @@
 ﻿title: VoloGen
-description: Roslyn incremental source generators that eliminate boilerplate for value-object patterns in .NET.
+subtitle: Roslyn incremental source generators
+description: >-
+  Roslyn incremental source generators that eliminate boilerplate
+  for value-object patterns in .NET.
 url: "https://oleksandrtsvirkun.github.io"
 baseurl: "/VoloGen"
 
-remote_theme: pages-themes/hacker@v0.2.0
+remote_theme: "mmistakes/minimal-mistakes@4.26.2"
+minimal_mistakes_skin: "dark"
 
 plugins:
   - jekyll-remote-theme
+  - jekyll-include-cache
 
-footer_content: >-
-  Copyright &copy; 2026 Oleksandr Tsvirkun &mdash;
-  Licensed under <a href="https://github.com/OleksandrTsvirkun/VoloGen/blob/main/LICENSE">MIT</a>.
+repository: "OleksandrTsvirkun/VoloGen"
 
-kramdown:
-  toc_levels: "2..3"
+footer:
+  links:
+    - label: "GitHub"
+      icon: "fab fa-fw fa-github"
+      url: "https://github.com/OleksandrTsvirkun/VoloGen"
+    - label: "NuGet"
+      icon: "fas fa-fw fa-cube"
+      url: "https://www.nuget.org/profiles/oleksandr.tsvirkun"
+
+# Default front matter
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      sidebar:
+        nav: "docs"
+      toc: true
+      toc_sticky: true
 
 # Exclude
 exclude:
