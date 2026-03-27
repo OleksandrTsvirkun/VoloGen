@@ -3,8 +3,6 @@ title: Installation
 permalink: /installation/
 ---
 
-# Installation
-
 ---
 
 ## NuGet Packages

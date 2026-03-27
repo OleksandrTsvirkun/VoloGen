@@ -3,8 +3,6 @@ title: Generators
 permalink: /generators/
 ---
 
-# Generators
-
 VoloGen provides four independent source generators. Each one targets a specific value-object concern and ships as its own NuGet package.
 
 | Generator | You Provide | Generator Emits |
