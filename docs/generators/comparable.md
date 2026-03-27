@@ -1,8 +1,6 @@
 ﻿---
 title: AutoComparable
-layout: default
-parent: Generators
-nav_order: 2
+permalink: /generators/comparable/
 ---
 
 # AutoComparable

@@ -1,8 +1,6 @@
 ﻿---
 title: AutoParsable
-layout: default
-parent: Generators
-nav_order: 3
+permalink: /generators/parsable/
 ---
 
 # AutoParsable

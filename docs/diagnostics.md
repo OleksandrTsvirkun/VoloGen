@@ -1,7 +1,6 @@
 ﻿---
 title: Diagnostics
-layout: default
-nav_order: 3
+permalink: /diagnostics/
 ---
 
 # Diagnostics

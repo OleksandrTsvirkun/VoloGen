@@ -1,7 +1,6 @@
 ﻿---
 title: Design Principles
-layout: default
-nav_order: 6
+permalink: /design/
 ---
 
 # Design Principles

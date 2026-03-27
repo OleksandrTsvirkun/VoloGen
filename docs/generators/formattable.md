@@ -1,8 +1,6 @@
 ﻿---
 title: AutoFormattable
-layout: default
-parent: Generators
-nav_order: 4
+permalink: /generators/formattable/
 ---
 
 # AutoFormattable

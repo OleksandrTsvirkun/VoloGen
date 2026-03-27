@@ -1,7 +1,6 @@
 ﻿---
 title: Changelog
-layout: default
-nav_order: 8
+permalink: /changelog/
 ---
 
 # Changelog
