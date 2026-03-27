@@ -1,8 +1,6 @@
 ﻿---
 title: AutoEquality
-layout: default
-parent: Generators
-nav_order: 1
+permalink: /generators/equality/
 ---
 
 # AutoEquality
