@@ -3,19 +3,24 @@
 
 @import "jekyll-theme-hacker";
 
-/* ── Layout ─────────────────────────────────────────────── */
+/* ── Reset hacker-theme globals ──────────────────────────── */
 
 body {
+  padding: 0;
   background: #151515;
   color: #e0e0e0;
 }
 
+/* ── Layout ─────────────────────────────────────────────── */
+
 .wrapper {
   display: flex;
+  width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 20px 24px;
   gap: 32px;
+  box-sizing: border-box;
 }
 
 /* ── Header ─────────────────────────────────────────────── */
@@ -24,6 +29,7 @@ header {
   background: #0d0d0d;
   border-bottom: 1px solid #2a2a2a;
   padding: 0;
+  width: 100%;
 }
 
 .header-inner {
@@ -94,6 +100,8 @@ header {
 
 .nav-list li {
   margin-bottom: 2px;
+  list-style-image: none;
+  list-style-type: none;
 }
 
 .nav-list > li > a {
@@ -116,6 +124,11 @@ header {
   list-style: none;
   padding: 0 0 0 16px;
   margin: 0;
+}
+
+.nav-children li {
+  list-style-image: none;
+  list-style-type: none;
 }
 
 .nav-children li a {
@@ -247,6 +260,11 @@ header {
   list-style: none;
   padding: 0;
   margin: 0;
+}
+
+.toc-list li {
+  list-style-image: none;
+  list-style-type: none;
 }
 
 .toc-list li a {
