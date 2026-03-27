@@ -61,12 +61,14 @@ jobs:
           DATE=$(date +%Y-%m-%d)
           git fetch origin main
           git checkout -B main origin/main
+          # Build the new version entry
           {
             printf "## [%s] - %s\n\n" "$VERSION" "$DATE"
             cat /tmp/release_notes.md
             printf "\n"
-            cat CHANGELOG.md
-          } > /tmp/CHANGELOG.md
+          } > /tmp/new_entry.md
+          # Insert new entry before the first existing ## [ version heading
+          awk '/^## \[/ && !done { while ((getline line < "/tmp/new_entry.md") > 0) print line; done=1 } { print }' CHANGELOG.md > /tmp/CHANGELOG.md
           mv /tmp/CHANGELOG.md CHANGELOG.md
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
