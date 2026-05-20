@@ -1,6 +1,10 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
+
+using System.Linq;
+using System.Reflection;
 
 using VoloGen.Common;
 using VoloGen.Parsable;
@@ -702,6 +706,88 @@ public class ParsableGeneratorTests
         await test.RunAsync();
 
         Assert.True(true);
+    }
+
+    [Fact]
+    public async Task ThrowOnNull_Default_EmitsNullCheckInParseStringOverload()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoParsable]
+            public partial struct Weight
+            {
+                private double _value;
+
+                public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Weight result)
+                {
+                    if (double.TryParse(s, provider, out var value))
+                    {
+                        result = new Weight { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.Contains("ValuGenThrowHelper.ThrowIfNull(s, nameof(s));", generated);
+    }
+
+    [Fact]
+    public async Task ThrowOnNull_False_OmitsNullCheckInParseStringOverload()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoParsable(ThrowOnNull = false)]
+            public partial struct WeightNoThrow
+            {
+                private double _value;
+
+                public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out WeightNoThrow result)
+                {
+                    if (double.TryParse(s, provider, out var value))
+                    {
+                        result = new WeightNoThrow { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.DoesNotContain("ThrowIfNull(s, nameof(s));", generated);
+    }
+
+    private static async Task<string> RunGeneratorAsync(string source)
+    {
+        var references = await ReferenceAssemblies.Net.Net90.ResolveAsync(LanguageNames.CSharp, default);
+        var attributeRef = MetadataReference.CreateFromFile(typeof(AutoParsableAttribute).Assembly.Location);
+
+        var compilation = CSharpCompilation.Create(
+            "TestAssembly",
+            [CSharpSyntaxTree.ParseText(source)],
+            [.. references, attributeRef],
+            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        var generator = new ParsableGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
+        var results = driver.GetRunResult();
+
+        return string.Concat(results.GeneratedTrees.Select(t => t.GetText().ToString()));
     }
 }
 

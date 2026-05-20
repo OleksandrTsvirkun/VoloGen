@@ -72,5 +72,13 @@ public sealed class AutoParsableAttribute : Attribute
     /// method.
     /// </remarks>
     public bool ImplementExact { get; set; }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether an exception should be thrown
+    /// when a null value is encountered during parsing.
+    /// Defaults to <see langword="true"/>.
+    /// </summary>
+    /// <value><see langword="true"/> to throw on null; otherwise, <see langword="false"/>.</value>
+    public bool ThrowOnNull { get; set; } = true;
 }
 
