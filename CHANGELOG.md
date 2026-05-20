@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 
+## [1.1.0] - 2026-05-20
+
+## What's Changed
+* fix(docs): update contact email to outlook across all community files by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/13
+* ci: add dotnet format verification step to CI workflow by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/14
+* docs: switch to hacker theme with left nav and right TOC by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/15
+* fix(docs): exclude vendor dir and remove stale callout config by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/16
+* docs: switch to minimal-mistakes theme with dark skin by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/17
+* docs: auto-generate changelog page and clean up CHANGELOG.md by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/18
+* ci(ci,docs): skip builds for docs-only changes and auto-generate contributing page by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/19
+* fix(docs): skip first heading line to avoid duplicate titles in generated pages by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/20
+* fix(docs): remove duplicate H1 headings from all docs pages by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/21
+* Feat/parsable throw on null by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/22
+* Docs/release process by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/23
+
+
+**Full Changelog**: https://github.com/OleksandrTsvirkun/VoloGen/compare/v1.0.0...v1.1.0
 ## [1.0.0] - 2026-03-27
 
 ## What's Changed
