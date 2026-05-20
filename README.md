@@ -1,4 +1,4 @@
-# VoloGen
+﻿# VoloGen
 
 [![CI](https://github.com/OleksandrTsvirkun/VoloGen/actions/workflows/ci.yml/badge.svg)](https://github.com/OleksandrTsvirkun/VoloGen/actions/workflows/ci.yml)
 [![NuGet](https://img.shields.io/nuget/v/VoloGen.Parsable?color=blue&label=NuGet)](https://www.nuget.org/profiles/oleksandr.tsvirkun)
@@ -148,12 +148,13 @@ bool ok2 = Amount.TryParse("100", CultureInfo.InvariantCulture, out _); // true
 
 | You write | Generated |
 |---|---|
-| `static bool TryParse(ReadOnlySpan<char>, IFormatProvider?, out T)` | `Parse(string, IFormatProvider?)` |
+| `static bool TryParse(ReadOnlySpan<char>, IFormatProvider?, out T)` | `Parse(string, IFormatProvider?)` — throws `ArgumentNullException` if `string` arg is `null` (unless `ThrowOnNull = false`) |
 | | `Parse(ReadOnlySpan<char>, IFormatProvider?)` |
-| | `TryParse(string?, IFormatProvider?, out T)` |
+| | `TryParse(string?, IFormatProvider?, out T)` — accepts `null`; converts via `AsSpan()` |
 | | Providerless & spanless convenience overloads |
 | **Optional flag:** `ImplementUtf8 = true` | `IUtf8SpanParsable<T>` overloads |
 | **Optional flag:** `ImplementExact = true` | `ParseExact` / `TryParseExact` overloads |
+| **Optional flag:** `ThrowOnNull = false` | Disables `ArgumentNullException` guard in `Parse(string s, ...)` overloads (default: `true`) |
 
 ### AutoFormattable
 
@@ -247,6 +248,10 @@ dotnet run --project samples/VoloGen.Samples.Formattable
 dotnet run --project samples/VoloGen.Samples.Comparable
 dotnet run --project samples/VoloGen.Samples.Equality
 ```
+
+### Releasing
+
+See the [Release Process](https://oleksandrtsvirkun.github.io/VoloGen/releasing/) documentation for how to tag and publish a new version.
 
 ### Commit Policy
 
