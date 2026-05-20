@@ -79,6 +79,7 @@ public sealed class ParsableGenerator : IIncrementalGenerator
 
         bool implementUtf8 = GetNamedBoolArgument(context.Attributes[0], "ImplementUtf8");
         bool implementExact = GetNamedBoolArgument(context.Attributes[0], "ImplementExact");
+        bool throwOnNull = GetNamedBoolArgumentWithDefault(context.Attributes[0], "ThrowOnNull", defaultValue: true);
 
         string typeDisplayName = typeSymbol.ToDisplayString();
 
@@ -116,6 +117,7 @@ public sealed class ParsableGenerator : IIncrementalGenerator
             isAbstract,
             implementUtf8,
             implementExact,
+            throwOnNull,
             hasTryParse,
             hasTryParseSpanNoProvider,
             hasTryParseStringProvider,
@@ -156,6 +158,19 @@ public sealed class ParsableGenerator : IIncrementalGenerator
         }
 
         return false;
+    }
+
+    private static T GetNamedBoolArgumentWithDefault<T>(AttributeData attribute, string name, T defaultValue)
+    {
+        foreach (var argument in attribute.NamedArguments)
+        {
+            if (argument.Key == name && argument.Value.Value is T value)
+            {
+                return value;
+            }
+        }
+
+        return defaultValue;
     }
 
     private static bool HasTryParseSpanProvider(INamedTypeSymbol typeSymbol, string typeName)
@@ -583,15 +598,19 @@ public sealed class ParsableGenerator : IIncrementalGenerator
 
         if (!target.HasExistingParseStringProvider)
         {
+            string nullCheck = string.Empty;
+            if (target.ThrowOnNull)
+            {
+                nullCheck = """
+        ValuGenThrowHelper.ThrowIfNull(s, nameof(s));
+
+""";
+            }
+
             members.AppendLine($$"""
     public static {{target.TypeName}} Parse(string s, System.IFormatProvider? provider)
     {
-        if (s is null)
-        {
-            ValuGenThrowHelper.ThrowArgumentNullException(nameof(s));
-        }
-
-        if (!TryParse(s.AsSpan(), provider, out var result))
+{{nullCheck}}        if (!TryParse(s.AsSpan(), provider, out var result))
         {
             ValuGenThrowHelper.ThrowFormatException("{{invalidFormatMessage}}");
         }
@@ -673,15 +692,19 @@ public sealed class ParsableGenerator : IIncrementalGenerator
 
         if (target.ImplementExact && !target.HasExistingParseExactStringProvider)
         {
+            string nullCheckExact = string.Empty;
+            if (target.ThrowOnNull)
+            {
+                nullCheckExact = """
+        ValuGenThrowHelper.ThrowIfNull(s, nameof(s));
+
+""";
+            }
+
             members.AppendLine($$"""
     public static {{target.TypeName}} ParseExact(string s, System.ReadOnlySpan<char> format, System.IFormatProvider? provider)
     {
-        if (s is null)
-        {
-            ValuGenThrowHelper.ThrowArgumentNullException(nameof(s));
-        }
-
-        if (!TryParseExact(s.AsSpan(), format, provider, out var result))
+{{nullCheckExact}}        if (!TryParseExact(s.AsSpan(), format, provider, out var result))
         {
             ValuGenThrowHelper.ThrowFormatException("{{invalidFormatMessage}}");
         }
@@ -835,9 +858,12 @@ using System;
 file static class ValuGenThrowHelper
 {
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
-    internal static void ThrowArgumentNullException(string paramName)
+    internal static void ThrowIfNull<T>(T? argument, string paramName) where T : class
     {
-        throw new System.ArgumentNullException(paramName);
+        if (argument is null)
+        {
+            throw new System.ArgumentNullException(paramName);
+        }
     }
 
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
@@ -862,6 +888,7 @@ file static class ValuGenThrowHelper
         bool IsAbstract,
         bool ImplementUtf8,
         bool ImplementExact,
+        bool ThrowOnNull,
         bool HasTryParseCore,
         bool HasExistingTryParseSpanNoProvider,
         bool HasExistingTryParseStringProvider,
