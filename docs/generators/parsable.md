@@ -54,13 +54,16 @@ Amount.Parse((string)null!, null); // no ArgumentNullException
 
 ### Base Overloads (always generated)
 
+> **Nullable args:** `Parse(string s, ...)` overloads accept a non-nullable `string` and throw `ArgumentNullException` when `s` is `null` (controlled by [`ThrowOnNull`](#thrownull)).
+> `TryParse(string? s, ...)` overloads accept `null` and convert it to an empty span via `AsSpan()`.
+
 | Generated Member | Delegates To |
 |:-----------------|:-------------|
-| `static T Parse(string s, IFormatProvider? provider)` | `TryParse` -> throw on failure |
-| `static T Parse(ReadOnlySpan<char> s, IFormatProvider? provider)` | `TryParse` -> throw on failure |
+| `static T Parse(string s, IFormatProvider? provider)` | `TryParse` → throw on failure; throws `ArgumentNullException` if `s` is `null` (when `ThrowOnNull` is `true`) |
+| `static T Parse(ReadOnlySpan<char> s, IFormatProvider? provider)` | `TryParse` → throw on failure |
 | `static T Parse(string s)` | `TryParse(s, null, ...)` |
 | `static T Parse(ReadOnlySpan<char> s)` | `TryParse(s, null, ...)` |
-| `static bool TryParse(string? s, IFormatProvider? provider, out T result)` | Core `TryParse` via `AsSpan()` |
+| `static bool TryParse(string? s, IFormatProvider? provider, out T result)` | Core `TryParse` via `AsSpan()` — `null` becomes empty span |
 | `static bool TryParse(string? s, out T result)` | `TryParse(s, null, ...)` |
 | `static bool TryParse(ReadOnlySpan<char> s, out T result)` | `TryParse(s, null, ...)` |
 
@@ -82,9 +85,9 @@ public static bool TryParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format
 
 | Generated Member | Delegates To |
 |:-----------------|:-------------|
-| `static T ParseExact(string s, string format, IFormatProvider? provider)` | `TryParseExact` -> throw on failure |
-| `static T ParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format, IFormatProvider? provider)` | `TryParseExact` -> throw on failure |
-| `static bool TryParseExact(string? s, string? format, IFormatProvider? provider, out T result)` | Core `TryParseExact` |
+| `static T ParseExact(string s, string format, IFormatProvider? provider)` | `TryParseExact` → throw on failure; throws `ArgumentNullException` if `s` is `null` (when `ThrowOnNull` is `true`) |
+| `static T ParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format, IFormatProvider? provider)` | `TryParseExact` → throw on failure |
+| `static bool TryParseExact(string? s, string? format, IFormatProvider? provider, out T result)` | Core `TryParseExact` — `null` args accepted |
 | Providerless and spanless convenience overloads | Delegate with `null` defaults |
 
 ## Example

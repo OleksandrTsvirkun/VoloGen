@@ -29,6 +29,8 @@
     children:
       - title: "Contributing"
         url: /contributing/
+      - title: "Release Process"
+        url: /releasing/
       - title: "Changelog"
         url: /changelog/
       - title: "FAQ"
