@@ -3,8 +3,6 @@ title: Design Principles
 permalink: /design/
 ---
 
-# Design Principles
-
 This page explains the architectural decisions behind VoloGen's source generators.
 
 ---

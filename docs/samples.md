@@ -3,8 +3,6 @@ title: Samples
 permalink: /samples/
 ---
 
-# Samples
-
 The repository includes runnable sample projects under `samples/` that demonstrate each generator in action.
 
 ---
