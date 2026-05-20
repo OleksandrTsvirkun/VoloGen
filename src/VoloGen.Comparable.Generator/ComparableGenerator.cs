@@ -292,18 +292,18 @@ public sealed class ComparableGenerator : IIncrementalGenerator
         string nullableAnnotation = GetNullableAnnotation(target);
         string ns = BuildNamespacePrefix(target);
         string generatedTypeHeader = BuildGeneratedTypeHeader(target, ns);
-        string nullCheckCompareTo = BuildNullCheckCompareTo(target);
+        string nullCheckCompareTo = BuildNullCheckCompareTo();
 
         StringBuilder members = new();
 
         AppendCompareToIfMissing(target, nullableAnnotation, nullCheckCompareTo, members);
         AppendObjectCompareToIfMissing(target, members);
-        AppendOperatorLessThanIfMissing(target, members);
-        AppendOperatorGreaterThanIfMissing(target, members);
-        AppendOperatorLessThanOrEqualIfMissing(target, members);
-        AppendOperatorGreaterThanOrEqualIfMissing(target, members);
-        AppendOperatorEqualityIfMissing(target, members);
-        AppendOperatorInequalityIfMissing(target, members);
+        AppendOperatorLessThanIfMissing(target, nullableAnnotation, members);
+        AppendOperatorGreaterThanIfMissing(target, nullableAnnotation, members);
+        AppendOperatorLessThanOrEqualIfMissing(target, nullableAnnotation, members);
+        AppendOperatorGreaterThanOrEqualIfMissing(target, nullableAnnotation, members);
+        AppendOperatorEqualityIfMissing(target, nullableAnnotation, members);
+        AppendOperatorInequalityIfMissing(target, nullableAnnotation, members);
 
         if (members.Length == 0)
         {
@@ -362,20 +362,9 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 """;
     }
 
-    private static string BuildNullCheckCompareTo(TargetInfo target)
+    private static string BuildNullCheckCompareTo()
     {
-        if (target.IsValueType)
-        {
-            return string.Empty;
-        }
-
-        return """
-                if (other is null)
-                {
-                    return 1;
-                }
-
-            """;
+        return string.Empty;
     }
 
     private static void AppendCompareToIfMissing(TargetInfo target, string nullableAnnotation, string nullCheckCompareTo, StringBuilder members)
@@ -421,7 +410,7 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 """);
     }
 
-    private static void AppendOperatorLessThanIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorLessThanIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorLessThan)
         {
@@ -430,14 +419,14 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator <({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator <({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) < 0;
     }
 """);
     }
 
-    private static void AppendOperatorGreaterThanIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorGreaterThanIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorGreaterThan)
         {
@@ -446,14 +435,14 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator >({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator >({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) > 0;
     }
 """);
     }
 
-    private static void AppendOperatorLessThanOrEqualIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorLessThanOrEqualIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorLessThanOrEqual)
         {
@@ -462,14 +451,14 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator <=({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator <=({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) <= 0;
     }
 """);
     }
 
-    private static void AppendOperatorGreaterThanOrEqualIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorGreaterThanOrEqualIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorGreaterThanOrEqual)
         {
@@ -478,14 +467,14 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator >=({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator >=({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) >= 0;
     }
 """);
     }
 
-    private static void AppendOperatorEqualityIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorEqualityIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorEquality)
         {
@@ -494,14 +483,14 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator ==({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator ==({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) == 0;
     }
 """);
     }
 
-    private static void AppendOperatorInequalityIfMissing(TargetInfo target, StringBuilder members)
+    private static void AppendOperatorInequalityIfMissing(TargetInfo target, string nullableAnnotation, StringBuilder members)
     {
         if (target.HasOperatorInequality)
         {
@@ -510,7 +499,7 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IComparable<{{target
 
         members.AppendLine($$"""
     [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-    public static bool operator !=({{target.TypeName}} left, {{target.TypeName}} right)
+    public static bool operator !=({{target.TypeName}}{{nullableAnnotation}} left, {{target.TypeName}}{{nullableAnnotation}} right)
     {
         return Compare(left, right) != 0;
     }
