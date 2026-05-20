@@ -653,7 +653,7 @@ public class ComparableGeneratorTests
     }
 
     [Fact]
-    public async Task ReferenceType_Operators_HaveNonNullableParameters()
+    public async Task ReferenceType_Operators_HaveNullableParameters()
     {
         string source = """
             using System;
@@ -675,13 +675,12 @@ public class ComparableGeneratorTests
 
         string generated = await RunGeneratorAsync(source);
 
-        Assert.Contains("operator <(Score left, Score right)", generated);
-        Assert.Contains("operator >(Score left, Score right)", generated);
-        Assert.Contains("operator <=(Score left, Score right)", generated);
-        Assert.Contains("operator >=(Score left, Score right)", generated);
-        Assert.Contains("operator ==(Score left, Score right)", generated);
-        Assert.Contains("operator !=(Score left, Score right)", generated);
-        Assert.DoesNotContain("operator <(Score? left", generated);
+        Assert.Contains("operator <(Score? left, Score? right)", generated);
+        Assert.Contains("operator >(Score? left, Score? right)", generated);
+        Assert.Contains("operator <=(Score? left, Score? right)", generated);
+        Assert.Contains("operator >=(Score? left, Score? right)", generated);
+        Assert.Contains("operator ==(Score? left, Score? right)", generated);
+        Assert.Contains("operator !=(Score? left, Score? right)", generated);
     }
 
     private static async Task<string> RunGeneratorAsync(string source)
