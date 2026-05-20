@@ -3,8 +3,6 @@ title: AutoParsable
 permalink: /generators/parsable/
 ---
 
-# AutoParsable
-
 Generates `IParsable<T>`, `ISpanParsable<T>`, and optionally `IUtf8SpanParsable<T>` from a user-defined core `TryParse` method.
 
 ---
@@ -31,6 +29,26 @@ The annotated type **must**:
 |:---------|:-----|:--------|:------------|
 | `ImplementUtf8` | `bool` | `false` | Generate `IUtf8SpanParsable<T>` overloads |
 | `ImplementExact` | `bool` | `false` | Generate `ParseExact` / `TryParseExact` overloads |
+| `ThrowOnNull` | `bool` | `true` | Emit a null check in `Parse(string s, ...)` and `ParseExact(string s, ...)` overloads |
+
+### ThrowOnNull
+
+When `ThrowOnNull` is `true` (the default), the generated `Parse(string s, ...)` and `ParseExact(string s, ...)` overloads throw `ArgumentNullException` if `s` is `null`:
+
+```csharp
+// ThrowOnNull = true (default)
+var result = Amount.Parse((string)null!, null); // throws ArgumentNullException
+```
+
+Set `ThrowOnNull = false` to skip the null guard — useful when the type is only ever parsed from non-null sources or when you handle null in the core `TryParse` method:
+
+```csharp
+[AutoParsable(ThrowOnNull = false)]
+public partial struct Amount { ... }
+
+// null is forwarded to TryParse via AsSpan() — returns default on failure
+Amount.Parse((string)null!, null); // no ArgumentNullException
+```
 
 ## What Gets Generated
 
