@@ -106,6 +106,11 @@ public sealed class ParsableGenerator : IIncrementalGenerator
         bool hasParseUtf8Provider = HasParseUtf8Provider(typeSymbol);
         bool hasParseUtf8NoProvider = HasParseUtf8NoProvider(typeSymbol);
 
+        bool hasTryParseExactUtf8Provider = HasTryParseExactUtf8Provider(typeSymbol, typeDisplayName);
+        bool hasTryParseExactUtf8NoProvider = HasTryParseExactUtf8NoProvider(typeSymbol, typeDisplayName);
+        bool hasParseExactUtf8Provider = HasParseExactUtf8Provider(typeSymbol);
+        bool hasParseExactUtf8NoProvider = HasParseExactUtf8NoProvider(typeSymbol);
+
         var attributeLocation = context.Attributes[0].ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? syntax.GetLocation();
 
         return new TargetInfo(
@@ -138,6 +143,10 @@ public sealed class ParsableGenerator : IIncrementalGenerator
             hasTryParseUtf8NoProvider,
             hasParseUtf8Provider,
             hasParseUtf8NoProvider,
+            hasTryParseExactUtf8Provider,
+            hasTryParseExactUtf8NoProvider,
+            hasParseExactUtf8Provider,
+            hasParseExactUtf8NoProvider,
             attributeLocation);
     }
 
@@ -398,6 +407,54 @@ public sealed class ParsableGenerator : IIncrementalGenerator
             "Parse",
             [
                 ("System.ReadOnlySpan<byte>", RefKind.None)
+            ]);
+    }
+
+    private static bool HasTryParseExactUtf8Provider(INamedTypeSymbol typeSymbol, string typeName)
+    {
+        return HasBoolMethod(
+            typeSymbol,
+            "TryParseExact",
+            [
+                ("System.ReadOnlySpan<byte>", RefKind.None),
+                ("System.ReadOnlySpan<char>", RefKind.None),
+                ("System.IFormatProvider", RefKind.None),
+                (typeName, RefKind.Out)
+            ]);
+    }
+
+    private static bool HasTryParseExactUtf8NoProvider(INamedTypeSymbol typeSymbol, string typeName)
+    {
+        return HasBoolMethod(
+            typeSymbol,
+            "TryParseExact",
+            [
+                ("System.ReadOnlySpan<byte>", RefKind.None),
+                ("System.ReadOnlySpan<char>", RefKind.None),
+                (typeName, RefKind.Out)
+            ]);
+    }
+
+    private static bool HasParseExactUtf8Provider(INamedTypeSymbol typeSymbol)
+    {
+        return HasTypeReturningMethod(
+            typeSymbol,
+            "ParseExact",
+            [
+                ("System.ReadOnlySpan<byte>", RefKind.None),
+                ("System.ReadOnlySpan<char>", RefKind.None),
+                ("System.IFormatProvider", RefKind.None)
+            ]);
+    }
+
+    private static bool HasParseExactUtf8NoProvider(INamedTypeSymbol typeSymbol)
+    {
+        return HasTypeReturningMethod(
+            typeSymbol,
+            "ParseExact",
+            [
+                ("System.ReadOnlySpan<byte>", RefKind.None),
+                ("System.ReadOnlySpan<char>", RefKind.None)
             ]);
     }
 
@@ -832,6 +889,54 @@ public sealed class ParsableGenerator : IIncrementalGenerator
 """);
         }
 
+        if (target.ImplementUtf8 && target.ImplementExact && !target.HasExistingTryParseExactUtf8Provider)
+        {
+            members.AppendLine($$"""
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool TryParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, System.IFormatProvider? provider, out {{target.TypeName}} result)
+    {
+        return TryParseExact(System.Text.Encoding.UTF8.GetString(utf8Text).AsSpan(), format, provider, out result);
+    }
+""");
+        }
+
+        if (target.ImplementUtf8 && target.ImplementExact && !target.HasExistingTryParseExactUtf8NoProvider)
+        {
+            members.AppendLine($$"""
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static bool TryParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, out {{target.TypeName}} result)
+    {
+        return TryParseExact(utf8Text, format, null, out result);
+    }
+""");
+        }
+
+        if (target.ImplementUtf8 && target.ImplementExact && !target.HasExistingParseExactUtf8Provider)
+        {
+            members.AppendLine($$"""
+    public static {{target.TypeName}} ParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, System.IFormatProvider? provider)
+    {
+        if (!TryParseExact(utf8Text, format, provider, out var result))
+        {
+            ValuGenThrowHelper.ThrowFormatException("{{invalidFormatMessage}}");
+        }
+
+        return result;
+    }
+""");
+        }
+
+        if (target.ImplementUtf8 && target.ImplementExact && !target.HasExistingParseExactUtf8NoProvider)
+        {
+            members.AppendLine($$"""
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+    public static {{target.TypeName}} ParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format)
+    {
+        return ParseExact(utf8Text, format, null);
+    }
+""");
+        }
+
         if (members.Length == 0)
         {
             return string.Empty;
@@ -909,6 +1014,10 @@ file static class ValuGenThrowHelper
         bool HasExistingTryParseUtf8NoProvider,
         bool HasExistingParseUtf8Provider,
         bool HasExistingParseUtf8NoProvider,
+        bool HasExistingTryParseExactUtf8Provider,
+        bool HasExistingTryParseExactUtf8NoProvider,
+        bool HasExistingParseExactUtf8Provider,
+        bool HasExistingParseExactUtf8NoProvider,
         Location Location);
 }
 

@@ -772,6 +772,174 @@ public class ParsableGeneratorTests
         Assert.DoesNotContain("ThrowIfNull(s, nameof(s));", generated);
     }
 
+    [Fact]
+    public async Task ImplementUtf8AndExact_GeneratesUtf8ExactOverloads()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoParsable(ImplementUtf8 = true, ImplementExact = true)]
+            public partial struct Utf8ExactAmount
+            {
+                private decimal _value;
+
+                public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Utf8ExactAmount result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new Utf8ExactAmount { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+
+                public static bool TryParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format, IFormatProvider? provider, out Utf8ExactAmount result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new Utf8ExactAmount { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.Contains("public static bool TryParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, System.IFormatProvider? provider, out Utf8ExactAmount result)", generated);
+        Assert.Contains("public static bool TryParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, out Utf8ExactAmount result)", generated);
+        Assert.Contains("public static Utf8ExactAmount ParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format, System.IFormatProvider? provider)", generated);
+        Assert.Contains("public static Utf8ExactAmount ParseExact(System.ReadOnlySpan<byte> utf8Text, System.ReadOnlySpan<char> format)", generated);
+    }
+
+    [Fact]
+    public async Task ImplementExactWithoutUtf8_DoesNotGenerateUtf8ExactOverloads()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoParsable(ImplementExact = true)]
+            public partial struct NonUtf8ExactAmount
+            {
+                private decimal _value;
+
+                public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out NonUtf8ExactAmount result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new NonUtf8ExactAmount { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+
+                public static bool TryParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format, IFormatProvider? provider, out NonUtf8ExactAmount result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new NonUtf8ExactAmount { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.DoesNotContain("TryParseExact(System.ReadOnlySpan<byte>", generated);
+        Assert.DoesNotContain("ParseExact(System.ReadOnlySpan<byte>", generated);
+    }
+
+    [Fact]
+    public async Task ImplementUtf8AndExact_ExistingUtf8ExactOverloads_SkipsExistingMethods()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoParsable(ImplementUtf8 = true, ImplementExact = true)]
+            public partial struct Utf8ExactFull
+            {
+                private decimal _value;
+
+                public static bool TryParse(ReadOnlySpan<char> s, IFormatProvider? provider, out Utf8ExactFull result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new Utf8ExactFull { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+
+                public static bool TryParseExact(ReadOnlySpan<char> s, ReadOnlySpan<char> format, IFormatProvider? provider, out Utf8ExactFull result)
+                {
+                    if (decimal.TryParse(s, provider, out var value))
+                    {
+                        result = new Utf8ExactFull { _value = value };
+                        return true;
+                    }
+                    result = default;
+                    return false;
+                }
+
+                public static bool TryParseExact(ReadOnlySpan<byte> utf8Text, ReadOnlySpan<char> format, IFormatProvider? provider, out Utf8ExactFull result)
+                {
+                    return TryParseExact(System.Text.Encoding.UTF8.GetString(utf8Text).AsSpan(), format, provider, out result);
+                }
+
+                public static bool TryParseExact(ReadOnlySpan<byte> utf8Text, ReadOnlySpan<char> format, out Utf8ExactFull result)
+                {
+                    return TryParseExact(utf8Text, format, null, out result);
+                }
+
+                public static Utf8ExactFull ParseExact(ReadOnlySpan<byte> utf8Text, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    if (!TryParseExact(utf8Text, format, provider, out var r)) throw new FormatException();
+                    return r;
+                }
+
+                public static Utf8ExactFull ParseExact(ReadOnlySpan<byte> utf8Text, ReadOnlySpan<char> format)
+                {
+                    return ParseExact(utf8Text, format, null);
+                }
+            }
+            """;
+
+        var test = new CSharpSourceGeneratorTest<ParsableGenerator, DefaultVerifier>
+        {
+            TestState =
+            {
+                Sources = { source },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
+                AdditionalReferences =
+                {
+                    MetadataReference.CreateFromFile(typeof(AutoParsableAttribute).Assembly.Location)
+                }
+            },
+            TestBehaviors = TestBehaviors.SkipGeneratedSourcesCheck
+        };
+
+        await test.RunAsync();
+
+        Assert.True(true);
+    }
+
     private static async Task<string> RunGeneratorAsync(string source)
     {
         var references = await ReferenceAssemblies.Net.Net90.ResolveAsync(LanguageNames.CSharp, default);

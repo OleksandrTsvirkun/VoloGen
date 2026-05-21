@@ -2,6 +2,8 @@
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
+using System.Linq;
+
 using VoloGen.Common;
 using VoloGen.Comparable;
 
@@ -622,6 +624,81 @@ public class ComparableGeneratorTests
         await test.RunAsync();
 
         Assert.True(true);
+    }
+
+    [Fact]
+    public async Task ReferenceType_CompareTo_HasNullableAnnotationOnParameter()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoComparable]
+            public partial class Score
+            {
+                private readonly int _value;
+
+                public static int Compare(Score? left, Score? right)
+                {
+                    return (left?._value ?? 0).CompareTo(right?._value ?? 0);
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.Contains("public int CompareTo(Score? other)", generated);
+    }
+
+    [Fact]
+    public async Task ReferenceType_Operators_HaveNullableParameters()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoComparable]
+            public partial class Score
+            {
+                private readonly int _value;
+
+                public static int Compare(Score? left, Score? right)
+                {
+                    return (left?._value ?? 0).CompareTo(right?._value ?? 0);
+                }
+            }
+            """;
+
+        string generated = await RunGeneratorAsync(source);
+
+        Assert.Contains("operator <(Score? left, Score? right)", generated);
+        Assert.Contains("operator >(Score? left, Score? right)", generated);
+        Assert.Contains("operator <=(Score? left, Score? right)", generated);
+        Assert.Contains("operator >=(Score? left, Score? right)", generated);
+        Assert.Contains("operator ==(Score? left, Score? right)", generated);
+        Assert.Contains("operator !=(Score? left, Score? right)", generated);
+    }
+
+    private static async Task<string> RunGeneratorAsync(string source)
+    {
+        var references = await ReferenceAssemblies.Net.Net90.ResolveAsync(LanguageNames.CSharp, default);
+        var attributeRef = MetadataReference.CreateFromFile(typeof(AutoComparableAttribute).Assembly.Location);
+
+        var compilation = Microsoft.CodeAnalysis.CSharp.CSharpCompilation.Create(
+            "TestAssembly",
+            [Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(source)],
+            [.. references, attributeRef],
+            new Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions(Microsoft.CodeAnalysis.OutputKind.DynamicallyLinkedLibrary));
+
+        var generator = new ComparableGenerator();
+        var driver = Microsoft.CodeAnalysis.CSharp.CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
+        var results = driver.GetRunResult();
+
+        return string.Concat(results.GeneratedTrees.Select(t => t.GetText().ToString()));
     }
 }
 
