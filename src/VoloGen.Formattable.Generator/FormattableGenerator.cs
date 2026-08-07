@@ -653,32 +653,52 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IFormattable, System
             return;
         }
 
+        if (target.MaxBufferSizeConstantValue <= target.MaxStackBufferSize)
+        {
+            members.AppendLine($$"""
+
+    public string ToString(string? format, System.IFormatProvider? provider)
+    {
+{{providerGuard}}        System.Span<char> buffer = stackalloc char[{{target.MaxBufferSizeConstantValue}}];
+
+        if (!TryFormat(
+                buffer,
+                out int charsWritten,
+                format.AsSpan(),
+                provider))
+        {
+            return string.Empty;
+        }
+
+        return new string(buffer[..charsWritten]);
+    }
+""");
+            return;
+        }
+
         members.AppendLine($$"""
 
     public string ToString(string? format, System.IFormatProvider? provider)
     {
-{{providerGuard}}        int maxBufferSize = {{target.MaxBufferSizeConstantValue}};
-        if (maxBufferSize <= {{target.MaxStackBufferSize}})
-        {
-            System.Span<char> stackBuffer = stackalloc char[maxBufferSize];
-            if (!TryFormat(stackBuffer, out int charsWritten, format.AsSpan(), provider))
-            {
-                return string.Empty;
-            }
+{{providerGuard}}        const int maxBufferSize = {{target.MaxBufferSizeConstantValue}};
+        char[] rented =
+            System.Buffers.ArrayPool<char>.Shared.Rent(maxBufferSize);
 
-            return stackBuffer[..charsWritten].ToString();
-        }
-
-        char[] rented = System.Buffers.ArrayPool<char>.Shared.Rent(maxBufferSize);
         try
         {
-            System.Span<char> pooledBuffer = rented.AsSpan(0, maxBufferSize);
-            if (!TryFormat(pooledBuffer, out int charsWritten, format.AsSpan(), provider))
+            System.Span<char> buffer =
+                rented.AsSpan(0, maxBufferSize);
+
+            if (!TryFormat(
+                    buffer,
+                    out int charsWritten,
+                    format.AsSpan(),
+                    provider))
             {
                 return string.Empty;
             }
 
-            return pooledBuffer[..charsWritten].ToString();
+            return new string(buffer[..charsWritten]);
         }
         finally
         {

@@ -40,6 +40,11 @@ The annotated type **must**:
 
 `MaxStackBufferSize` controls when generated `ToString` uses `stackalloc` instead of `ArrayPool<char>`. Its default is `256`, preserving the previous behavior. When the property is explicitly set, it must be greater than `0`, no greater than `1024`, and no greater than the effective `MaxBufferSize`.
 
+The generator resolves this choice at generation time. For sizes at or below
+`MaxStackBufferSize`, it emits only a `stackalloc` implementation. Larger sizes
+use `ArrayPool<char>` with `AsSpan(0, maxBufferSize)`, so a pooled array that is
+larger than requested never expands the buffer visible to the core formatter.
+
 ## What Gets Generated
 
 ### Base Overloads (always generated)

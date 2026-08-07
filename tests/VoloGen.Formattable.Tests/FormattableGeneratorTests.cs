@@ -1,4 +1,4 @@
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
@@ -857,7 +857,8 @@ public class FormattableGeneratorTests
 
         string generatedSource = await RunGeneratorAsync(source);
 
-        Assert.Contains("int maxBufferSize = 128;", generatedSource);
+        Assert.Contains("System.Span<char> buffer = stackalloc char[128];", generatedSource);
+        Assert.DoesNotContain("ArrayPool<char>.Shared.Rent", generatedSource);
     }
 
     [Fact]
@@ -884,8 +885,10 @@ public class FormattableGeneratorTests
 
         string generatedSource = await RunGeneratorAsync(source);
 
-        Assert.Contains("int maxBufferSize = 4096;", generatedSource);
-        Assert.DoesNotContain("int maxBufferSize = 64;", generatedSource);
+        Assert.Contains("const int maxBufferSize = 4096;", generatedSource);
+        Assert.Contains("System.Buffers.ArrayPool<char>.Shared.Rent(maxBufferSize)", generatedSource);
+        Assert.Contains("rented.AsSpan(0, maxBufferSize)", generatedSource);
+        Assert.DoesNotContain("stackalloc char[4096]", generatedSource);
     }
 
     [Fact]
@@ -912,7 +915,8 @@ public class FormattableGeneratorTests
 
         string generatedSource = await RunGeneratorAsync(source);
 
-        Assert.Contains("int maxBufferSize = 64;", generatedSource);
+        Assert.Contains("System.Span<char> buffer = stackalloc char[64];", generatedSource);
+        Assert.DoesNotContain("ArrayPool<char>.Shared.Rent", generatedSource);
     }
 
     [Fact]
@@ -937,7 +941,9 @@ public class FormattableGeneratorTests
 
         string generatedSource = await RunGeneratorAsync(source);
 
-        Assert.Contains("if (maxBufferSize <= 128)", generatedSource);
+        Assert.Contains("const int maxBufferSize = 512;", generatedSource);
+        Assert.Contains("rented.AsSpan(0, maxBufferSize)", generatedSource);
+        Assert.DoesNotContain("if (maxBufferSize <= 128)", generatedSource);
     }
 
     [Fact]
