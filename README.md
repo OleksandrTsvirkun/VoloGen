@@ -194,11 +194,8 @@ All diagnostics use the **VoloGen** category and are errors by default.
 ```
 VoloGen/
 +-- .github/                  # CI workflows, issue templates, Copilot instructions
-+-- samples/                  # End-to-end usage examples
-|   +-- VoloGen.Samples.Equality/
-|   +-- VoloGen.Samples.Comparable/
-|   +-- VoloGen.Samples.Parsable/
-|   +-- VoloGen.Samples.Formattable/
++-- examples/                 # End-to-end usage examples
+|   +-- VoloGen.Formattable.Examples/
 +-- src/
 |   +-- VoloGen.Common/       # Shared diagnostics, helpers, localized .resx
 |   +-- VoloGen.Equality/     # [AutoEquality] attribute
@@ -246,11 +243,12 @@ dotnet test
 ### Run Samples
 
 ```bash
-dotnet run --project samples/VoloGen.Samples.Parsable
-dotnet run --project samples/VoloGen.Samples.Formattable
-dotnet run --project samples/VoloGen.Samples.Comparable
-dotnet run --project samples/VoloGen.Samples.Equality
+dotnet run --project examples/VoloGen.Formattable.Examples
 ```
+
+The Formattable example demonstrates attribute-based `MaxBufferSize` and
+`MaxStackBufferSize`, the legacy `const int MaxBufferSize` fallback, generated
+`ToString` overloads, and `ISpanFormattable.TryFormat`.
 
 ### Releasing
 
@@ -264,7 +262,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) e
 
 **Types:** `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`, `perf`, `style`
 
-**Scopes:** `parsable`, `formattable`, `comparable`, `equality`, `common`, `ci`, `readme`, `samples`
+**Scopes:** `parsable`, `formattable`, `comparable`, `equality`, `common`, `ci`, `readme`, `examples`
 
 ---
 
