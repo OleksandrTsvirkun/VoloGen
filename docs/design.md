@@ -135,5 +135,7 @@ Some generators support attribute properties that enable optional features:
 | `ImplementExact` | Parsable | Emits `ParseExact` / `TryParseExact` overloads |
 | `DefaultFormat` | Formattable | Sets default format string for formatless overloads |
 | `AllowNullFormatProvider` | Formattable | Controls null-provider guard generation |
+| `MaxBufferSize` | Formattable | Sets the maximum character buffer size for generated `ToString` |
+| `MaxStackBufferSize` | Formattable | Selects the largest generated `ToString` buffer that uses `stackalloc` |
 
 Feature flags are read from the attribute's named arguments during the `GetTargetInfo` transform phase and stored in the immutable `TargetInfo` record for downstream processing.

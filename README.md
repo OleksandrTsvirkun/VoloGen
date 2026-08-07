@@ -161,11 +161,13 @@ bool ok2 = Amount.TryParse("100", CultureInfo.InvariantCulture, out _); // true
 | You write | Generated |
 |---|---|
 | `bool TryFormat(Span<char>, out int, ReadOnlySpan<char>, IFormatProvider?)` | `IFormattable` — `ToString(string?, IFormatProvider?)` |
-| `const int MaxBufferSize` *or* `ToString(string?, IFormatProvider?)` | `ISpanFormattable` convenience overloads |
+| Positive `MaxBufferSize` attribute property, `const int MaxBufferSize`, *or* `ToString(string?, IFormatProvider?)` | `ISpanFormattable` convenience overloads |
 | | `override string ToString()` |
 | **Optional flag:** `ImplementUtf8 = true` | `IUtf8SpanFormattable` overloads |
 | **Optional flag:** `DefaultFormat = "G"` | Default format for formatless overloads |
 | **Optional flag:** `AllowNullFormatProvider = false` | Null-provider guard with `ArgumentNullException` |
+| **Optional property:** `MaxBufferSize = 256` | Buffer size for generated `ToString`; overrides the legacy constant |
+| **Optional property:** `MaxStackBufferSize = 256` | `stackalloc` threshold; defaults to `256`, maximum `1024` |
 
 ---
 
@@ -183,6 +185,7 @@ All diagnostics use the **VoloGen** category and are errors by default.
 | **VG0006** | `MissingEquatableField` | `[AutoEquality]` without `Equal` / `GetHashCode` |
 | **VG0007** | `MissingTryFormatMethod` | `[AutoFormattable]` without `TryFormat` |
 | **VG0008** | `MissingToStringOrMaxBufferSize` | `[AutoFormattable]` without `ToString` or `MaxBufferSize` |
+| **VG0009** | `InvalidMaxStackBufferSize` | Explicit `MaxStackBufferSize` is non-positive, greater than `1024`, or greater than `MaxBufferSize` |
 
 ---
 
@@ -191,11 +194,8 @@ All diagnostics use the **VoloGen** category and are errors by default.
 ```
 VoloGen/
 +-- .github/                  # CI workflows, issue templates, Copilot instructions
-+-- samples/                  # End-to-end usage examples
-|   +-- VoloGen.Samples.Equality/
-|   +-- VoloGen.Samples.Comparable/
-|   +-- VoloGen.Samples.Parsable/
-|   +-- VoloGen.Samples.Formattable/
++-- examples/                 # End-to-end usage examples
+|   +-- VoloGen.Formattable.Examples/
 +-- src/
 |   +-- VoloGen.Common/       # Shared diagnostics, helpers, localized .resx
 |   +-- VoloGen.Equality/     # [AutoEquality] attribute
@@ -243,11 +243,12 @@ dotnet test
 ### Run Samples
 
 ```bash
-dotnet run --project samples/VoloGen.Samples.Parsable
-dotnet run --project samples/VoloGen.Samples.Formattable
-dotnet run --project samples/VoloGen.Samples.Comparable
-dotnet run --project samples/VoloGen.Samples.Equality
+dotnet run --project examples/VoloGen.Formattable.Examples
 ```
+
+The Formattable example demonstrates attribute-based `MaxBufferSize` and
+`MaxStackBufferSize`, the legacy `const int MaxBufferSize` fallback, generated
+`ToString` overloads, and `ISpanFormattable.TryFormat`.
 
 ### Releasing
 
@@ -261,7 +262,7 @@ This project uses [Conventional Commits](https://www.conventionalcommits.org/) e
 
 **Types:** `feat`, `fix`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`, `perf`, `style`
 
-**Scopes:** `parsable`, `formattable`, `comparable`, `equality`, `common`, `ci`, `readme`, `samples`
+**Scopes:** `parsable`, `formattable`, `comparable`, `equality`, `common`, `ci`, `readme`, `examples`
 
 ---
 

@@ -18,9 +18,9 @@
 /// </para>
 /// <para>
 /// For <c>ToString</c> generation the type must either supply its own
-/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> declare a
-/// <c>const int MaxBufferSize</c> field so the generator can produce a
-/// stackalloc / <c>ArrayPool&lt;char&gt;</c>-backed implementation.
+/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> provide a positive
+/// <c>MaxBufferSize</c> attribute property or <c>const int MaxBufferSize</c> field so the
+/// generator can produce a stackalloc / <c>ArrayPool&lt;char&gt;</c>-backed implementation.
 /// </para>
 /// <para>
 /// When <see cref="ImplementUtf8"/> is <see langword="true"/>, the generator additionally emits
@@ -72,6 +72,22 @@ public sealed class AutoFormattableAttribute : Attribute
     /// </summary>
     /// <value><see langword="true"/> to allow null providers; <see langword="false"/> to enforce non-null providers.</value>
     public bool AllowNullFormatProvider { get; set; } = true;
+
+    /// <summary>
+    /// Gets or sets the maximum number of characters used by generated <c>ToString</c> buffers.
+    /// A positive value overrides the target type's <c>MaxBufferSize</c> constant.
+    /// Defaults to <c>0</c>, which uses the constant for backward compatibility.
+    /// </summary>
+    /// <value>A positive maximum buffer size, or <c>0</c> to use the target type's constant.</value>
+    public int MaxBufferSize { get; set; }
+
+    /// <summary>
+    /// Gets or sets the maximum number of characters that may be allocated with
+    /// <c>stackalloc</c> by generated <c>ToString</c> methods.
+    /// Defaults to <c>256</c> for backward compatibility.
+    /// </summary>
+    /// <value>A positive stack buffer size up to 1024 characters.</value>
+    public int MaxStackBufferSize { get; set; } = 256;
 
 }
 

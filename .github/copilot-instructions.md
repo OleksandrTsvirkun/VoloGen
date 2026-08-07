@@ -1,4 +1,4 @@
-# VoloGen — Copilot Instructions
+﻿# VoloGen — Copilot Instructions
 
 > These instructions guide GitHub Copilot (and other AI assistants) when working
 > inside the **VoloGen** repository. Follow them unless the user explicitly asks
@@ -156,8 +156,6 @@ Follow [Conventional Commits](https://www.conventionalcommits.org/).
 ---
 
 ## 7  Repository Structure
-
-```
 VoloGen/
 ├── .github/              # CI, issue templates, copilot instructions
 ├── samples/              # End-to-end usage examples
@@ -180,5 +178,11 @@ VoloGen/
 ├── Directory.Build.props
 ├── VoloGen.snk
 └── VoloGen.slnx
-```
+
+---
+
+## 8  Git Workflow
+
+- Always check the current branch and adhere to the Git Flow process.
+- Ensure that branching conventions are followed during development.
 

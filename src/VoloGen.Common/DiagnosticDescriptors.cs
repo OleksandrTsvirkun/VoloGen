@@ -123,8 +123,9 @@ public static class DiagnosticDescriptors
 
     /// <summary>
     /// <b>VG0008</b> — The type is annotated with <c>[AutoFormattable]</c> but defines neither
-    /// <c>string ToString(string?, IFormatProvider?)</c> nor a <c>const int MaxBufferSize</c> field.
-    /// At least one is required to generate <c>ToString</c> overloads.
+    /// <c>string ToString(string?, IFormatProvider?)</c> nor a positive <c>MaxBufferSize</c>
+    /// attribute property or <c>const int MaxBufferSize</c> field. At least one is required
+    /// to generate <c>ToString</c> overloads.
     /// </summary>
     public static readonly DiagnosticDescriptor MissingToStringOrMaxBufferSize = new(
         id: "VG0008",
@@ -134,5 +135,19 @@ public static class DiagnosticDescriptors
         defaultSeverity: DiagnosticSeverity.Error,
         isEnabledByDefault: true,
         description: Localize("VG0008_Description"));
+
+    /// <summary>
+    /// <b>VG0009</b> — The explicitly configured <c>MaxStackBufferSize</c> is invalid.
+    /// It must be positive, no greater than the stack allocation limit, and no greater
+    /// than the effective <c>MaxBufferSize</c> when one is available.
+    /// </summary>
+    public static readonly DiagnosticDescriptor InvalidMaxStackBufferSize = new(
+        id: "VG0009",
+        title: Localize("VG0009_Title"),
+        messageFormat: Localize("VG0009_MessageFormat"),
+        category: Category,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: Localize("VG0009_Description"));
 }
 

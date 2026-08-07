@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -123,10 +123,21 @@
     <value>Missing ToString or MaxBufferSize</value>
   </data>
   <data name="VG0008_MessageFormat" xml:space="preserve">
-    <value>Type '{0}' is marked with [AutoFormattable] but does not define 'string ToString(string?, IFormatProvider?)' and has no 'const int MaxBufferSize' field</value>
+    <value>Type '{0}' is marked with [AutoFormattable] but does not define 'string ToString(string?, IFormatProvider?)' and has no positive 'MaxBufferSize' attribute property or 'const int MaxBufferSize' field</value>
   </data>
   <data name="VG0008_Description" xml:space="preserve">
-    <value>The [AutoFormattable] attribute requires either a user-defined 'string ToString(string?, IFormatProvider?)' method or a 'const int MaxBufferSize' field to generate the ToString overload using stackalloc or ArrayPool.</value>
+    <value>The [AutoFormattable] attribute requires either a user-defined 'string ToString(string?, IFormatProvider?)' method, a positive 'MaxBufferSize' attribute property, or a 'const int MaxBufferSize' field to generate the ToString overload using stackalloc or ArrayPool.</value>
+  </data>
+
+  <!-- VG0009: InvalidMaxStackBufferSize -->
+  <data name="VG0009_Title" xml:space="preserve">
+    <value>Invalid MaxStackBufferSize</value>
+  </data>
+  <data name="VG0009_MessageFormat" xml:space="preserve">
+    <value>Type '{0}' has invalid MaxStackBufferSize value {2}; it must be greater than 0 and no greater than {1}</value>
+  </data>
+  <data name="VG0009_Description" xml:space="preserve">
+    <value>The explicitly configured MaxStackBufferSize must be positive, no greater than 1024 characters, and no greater than the effective MaxBufferSize.</value>
   </data>
 
   <!-- Exception messages -->

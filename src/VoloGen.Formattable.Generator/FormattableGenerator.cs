@@ -21,9 +21,9 @@ namespace VoloGen.Formattable;
 /// </para>
 /// <para>
 /// <c>ToString</c> generation requires either a user-defined
-/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> a
-/// <c>const int MaxBufferSize</c> field; the latter enables an auto-generated stackalloc /
-/// <see cref="System.Buffers.ArrayPool{T}"/>-backed implementation.
+/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> a positive
+/// <c>MaxBufferSize</c> attribute property or <c>const int MaxBufferSize</c> field; the latter
+/// options enable an auto-generated stackalloc / <see cref="System.Buffers.ArrayPool{T}"/>-backed implementation.
 /// </para>
 /// </remarks>
 [Generator(LanguageNames.CSharp)]
@@ -34,7 +34,7 @@ public sealed class FormattableGenerator : IIncrementalGenerator
     /// <summary>Constant name looked up on the target type to determine buffer sizing for <c>ToString</c> generation.</summary>
     private const string MaxBufferSizeConstantName = "MaxBufferSize";
     /// <summary>Maximum buffer size (in chars) that may be allocated on the stack via <c>stackalloc</c>.</summary>
-    private const int StackallocThreshold = 256;
+    private const int MaxStackBufferSizeLimit = 1024;
 
     /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -85,6 +85,9 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         bool implementUtf8 = GetNamedBoolArgument(context.Attributes[0], "ImplementUtf8");
         string? defaultFormat = GetNamedStringArgument(context.Attributes[0], "DefaultFormat");
         bool allowNullFormatProvider = GetNamedBoolArgument(context.Attributes[0], "AllowNullFormatProvider", true);
+        int attributeMaxBufferSize = GetNamedIntArgument(context.Attributes[0], "MaxBufferSize");
+        bool hasAttributeMaxStackBufferSize = HasNamedArgument(context.Attributes[0], "MaxStackBufferSize");
+        int maxStackBufferSize = GetNamedIntArgument(context.Attributes[0], "MaxStackBufferSize", 256);
 
         bool hasTryFormat = HasTryFormatCharProvider(typeSymbol);
         bool hasTryFormatCharFormatOnly = HasTryFormatCharFormatOnly(typeSymbol);
@@ -99,6 +102,11 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         bool hasTryFormatUtf8ProviderOnly = HasTryFormatUtf8ProviderOnly(typeSymbol);
         bool hasTryFormatUtf8NoArgs = HasTryFormatUtf8NoArgs(typeSymbol);
         var (hasMaxBufferSizeConstant, maxBufferSizeConstantValue) = GetMaxBufferSizeConstant(typeSymbol);
+        if (attributeMaxBufferSize > 0)
+        {
+            hasMaxBufferSizeConstant = true;
+            maxBufferSizeConstantValue = attributeMaxBufferSize;
+        }
 
         var attributeLocation = context.Attributes[0].ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? syntax.GetLocation();
 
@@ -121,6 +129,8 @@ public sealed class FormattableGenerator : IIncrementalGenerator
             allowNullFormatProvider,
             hasMaxBufferSizeConstant,
             maxBufferSizeConstantValue,
+            hasAttributeMaxStackBufferSize,
+            maxStackBufferSize,
             hasTryFormatUtf8Provider,
             hasTryFormatUtf8FormatOnly,
             hasTryFormatUtf8ProviderOnly,
@@ -165,6 +175,32 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         }
 
         return null;
+    }
+
+    private static int GetNamedIntArgument(AttributeData attribute, string name, int defaultValue = 0)
+    {
+        foreach (var argument in attribute.NamedArguments)
+        {
+            if (argument.Key == name && argument.Value.Value is int value)
+            {
+                return value;
+            }
+        }
+
+        return defaultValue;
+    }
+
+    private static bool HasNamedArgument(AttributeData attribute, string name)
+    {
+        foreach (var argument in attribute.NamedArguments)
+        {
+            if (argument.Key == name)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool HasTryFormatCharProvider(INamedTypeSymbol typeSymbol)
@@ -408,6 +444,24 @@ public sealed class FormattableGenerator : IIncrementalGenerator
             return;
         }
 
+        if (target.HasAttributeMaxStackBufferSize)
+        {
+            int maximumAllowed = target.HasMaxBufferSizeConstant
+                ? Math.Min(MaxStackBufferSizeLimit, target.MaxBufferSizeConstantValue)
+                : MaxStackBufferSizeLimit;
+
+            if (target.MaxStackBufferSize <= 0 || target.MaxStackBufferSize > maximumAllowed)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(
+                    DiagnosticDescriptors.InvalidMaxStackBufferSize,
+                    target.Location,
+                    target.TypeName,
+                    maximumAllowed,
+                    target.MaxStackBufferSize));
+                return;
+            }
+        }
+
         if (target.IsStatic)
         {
             context.ReportDiagnostic(Diagnostic.Create(
@@ -599,32 +653,52 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IFormattable, System
             return;
         }
 
+        if (target.MaxBufferSizeConstantValue <= target.MaxStackBufferSize)
+        {
+            members.AppendLine($$"""
+
+    public string ToString(string? format, System.IFormatProvider? provider)
+    {
+{{providerGuard}}        System.Span<char> buffer = stackalloc char[{{target.MaxBufferSizeConstantValue}}];
+
+        if (!TryFormat(
+                buffer,
+                out int charsWritten,
+                format.AsSpan(),
+                provider))
+        {
+            return string.Empty;
+        }
+
+        return new string(buffer[..charsWritten]);
+    }
+""");
+            return;
+        }
+
         members.AppendLine($$"""
 
     public string ToString(string? format, System.IFormatProvider? provider)
     {
-{{providerGuard}}        int maxBufferSize = {{target.MaxBufferSizeConstantValue}};
-        if (maxBufferSize <= {{StackallocThreshold}})
-        {
-            System.Span<char> stackBuffer = stackalloc char[maxBufferSize];
-            if (!TryFormat(stackBuffer, out int charsWritten, format.AsSpan(), provider))
-            {
-                return string.Empty;
-            }
+{{providerGuard}}        const int maxBufferSize = {{target.MaxBufferSizeConstantValue}};
+        char[] rented =
+            System.Buffers.ArrayPool<char>.Shared.Rent(maxBufferSize);
 
-            return stackBuffer[..charsWritten].ToString();
-        }
-
-        char[] rented = System.Buffers.ArrayPool<char>.Shared.Rent(maxBufferSize);
         try
         {
-            System.Span<char> pooledBuffer = rented.AsSpan(0, maxBufferSize);
-            if (!TryFormat(pooledBuffer, out int charsWritten, format.AsSpan(), provider))
+            System.Span<char> buffer =
+                rented.AsSpan(0, maxBufferSize);
+
+            if (!TryFormat(
+                    buffer,
+                    out int charsWritten,
+                    format.AsSpan(),
+                    provider))
             {
                 return string.Empty;
             }
 
-            return pooledBuffer[..charsWritten].ToString();
+            return new string(buffer[..charsWritten]);
         }
         finally
         {
@@ -875,6 +949,8 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IFormattable, System
         bool AllowNullFormatProvider,
         bool HasMaxBufferSizeConstant,
         int MaxBufferSizeConstantValue,
+         bool HasAttributeMaxStackBufferSize,
+         int MaxStackBufferSize,
         bool HasExistingTryFormatUtf8Provider,
         bool HasExistingTryFormatUtf8FormatOnly,
         bool HasExistingTryFormatUtf8ProviderOnly,

@@ -121,14 +121,15 @@ public bool TryFormat(Span<char> destination, out int charsWritten,
 
 **MissingToStringOrMaxBufferSize**
 
-**Trigger:** `[AutoFormattable]` is applied to a type that has `TryFormat` but provides neither a custom `ToString(string?, IFormatProvider?)` method nor a `const int MaxBufferSize` field.
+**Trigger:** `[AutoFormattable]` is applied to a type that has `TryFormat` but provides neither a custom `ToString(string?, IFormatProvider?)` method, a positive `MaxBufferSize` attribute property, nor a `const int MaxBufferSize` field.
 
 The generator needs one of these to produce the `ToString` overload:
 
 - **`const int MaxBufferSize`** -- the generator creates a `stackalloc` / `ArrayPool<char>`-backed `ToString`
+- **`MaxBufferSize` attribute property** -- the generator creates a `stackalloc` / `ArrayPool<char>`-backed `ToString`
 - **`string ToString(string?, IFormatProvider?)`** -- the generator uses your method directly
 
-**Fix:** Add either a `MaxBufferSize` constant or a `ToString(string?, IFormatProvider?)` method.
+**Fix:** Add a positive `MaxBufferSize` attribute property, a `MaxBufferSize` constant, or a `ToString(string?, IFormatProvider?)` method.
 
 ```csharp
 // Option A: MaxBufferSize
@@ -140,6 +141,26 @@ public string ToString(string? format, IFormatProvider? provider)
     return _value.ToString(format, provider);
 }
 ```
+
+---
+
+## VG0009
+
+**InvalidMaxStackBufferSize**
+
+**Trigger:** `[AutoFormattable]` explicitly sets `MaxStackBufferSize` to a value that is not positive, is greater than `1024`, or is greater than the effective `MaxBufferSize`.
+
+**Fix:** Set `MaxStackBufferSize` to a positive value no greater than `1024` and no greater than `MaxBufferSize`.
+
+```csharp
+[AutoFormattable(MaxBufferSize = 512, MaxStackBufferSize = 256)]
+public partial struct Amount
+{
+    // TryFormat implementation...
+}
+```
+
+The default value is `256` for backward compatibility. Existing code that does not explicitly set `MaxStackBufferSize` is not affected.
 
 ---
 
