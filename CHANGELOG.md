@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com),
 and this project adheres to [Semantic Versioning](https://semver.org).
 
 
+## [1.2.0] - 2026-08-07
+
+## What's Changed
+* perf(formattable): specialize generated buffer path by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/25
+* refactor(samples): consolidate Formattable examples by @OleksandrTsvirkun in https://github.com/OleksandrTsvirkun/VoloGen/pull/26
+
+
+**Full Changelog**: https://github.com/OleksandrTsvirkun/VoloGen/compare/v1.1.1...v1.2.0
 ## [1.1.0] - 2026-05-20
 
 ## What's Changed
