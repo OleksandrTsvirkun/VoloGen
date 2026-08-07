@@ -81,5 +81,13 @@ public sealed class AutoFormattableAttribute : Attribute
     /// <value>A positive maximum buffer size, or <c>0</c> to use the target type's constant.</value>
     public int MaxBufferSize { get; set; }
 
+    /// <summary>
+    /// Gets or sets the maximum number of characters that may be allocated with
+    /// <c>stackalloc</c> by generated <c>ToString</c> methods.
+    /// Defaults to <c>256</c> for backward compatibility.
+    /// </summary>
+    /// <value>A positive stack buffer size up to 1024 characters.</value>
+    public int MaxStackBufferSize { get; set; } = 256;
+
 }
 

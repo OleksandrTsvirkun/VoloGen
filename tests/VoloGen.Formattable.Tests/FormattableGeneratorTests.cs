@@ -915,6 +915,119 @@ public class FormattableGeneratorTests
         Assert.Contains("int maxBufferSize = 64;", generatedSource);
     }
 
+    [Fact]
+    public async Task AttributeMaxStackBufferSize_UsesConfiguredThreshold()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoFormattable(MaxBufferSize = 512, MaxStackBufferSize = 128)]
+            public partial struct StackSizedValue
+            {
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        string generatedSource = await RunGeneratorAsync(source);
+
+        Assert.Contains("if (maxBufferSize <= 128)", generatedSource);
+    }
+
+    [Fact]
+    public async Task AttributeMaxStackBufferSize_ReportsDiagnosticWhenTooLarge()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [{|#0:AutoFormattable(MaxBufferSize = 2048, MaxStackBufferSize = 1025)|}]
+            public partial struct StackSizedValue
+            {
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        var test = new CSharpSourceGeneratorTest<FormattableGenerator, DefaultVerifier>
+        {
+            TestState =
+            {
+                Sources = { source },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
+                AdditionalReferences =
+                {
+                    MetadataReference.CreateFromFile(typeof(AutoFormattableAttribute).Assembly.Location)
+                },
+                ExpectedDiagnostics =
+                {
+                    new DiagnosticResult(DiagnosticDescriptors.InvalidMaxStackBufferSize)
+                        .WithLocation(0)
+                        .WithArguments("StackSizedValue", 1024, 1025)
+                }
+            },
+            TestBehaviors = TestBehaviors.SkipGeneratedSourcesCheck
+        };
+
+        await test.RunAsync();
+        Assert.True(true);
+    }
+
+    [Fact]
+    public async Task AttributeMaxStackBufferSize_ReportsDiagnosticWhenGreaterThanMaxBufferSize()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [{|#0:AutoFormattable(MaxBufferSize = 64, MaxStackBufferSize = 128)|}]
+            public partial struct StackSizedValue
+            {
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        var test = new CSharpSourceGeneratorTest<FormattableGenerator, DefaultVerifier>
+        {
+            TestState =
+            {
+                Sources = { source },
+                ReferenceAssemblies = ReferenceAssemblies.Net.Net90,
+                AdditionalReferences =
+                {
+                    MetadataReference.CreateFromFile(typeof(AutoFormattableAttribute).Assembly.Location)
+                },
+                ExpectedDiagnostics =
+                {
+                    new DiagnosticResult(DiagnosticDescriptors.InvalidMaxStackBufferSize)
+                        .WithLocation(0)
+                        .WithArguments("StackSizedValue", 64, 128)
+                }
+            },
+            TestBehaviors = TestBehaviors.SkipGeneratedSourcesCheck
+        };
+
+        await test.RunAsync();
+        Assert.True(true);
+    }
+
     private static async Task<string> RunGeneratorAsync(string source)
     {
         var references = await ReferenceAssemblies.Net.Net90.ResolveAsync(LanguageNames.CSharp, default);

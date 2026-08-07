@@ -34,7 +34,7 @@ public sealed class FormattableGenerator : IIncrementalGenerator
     /// <summary>Constant name looked up on the target type to determine buffer sizing for <c>ToString</c> generation.</summary>
     private const string MaxBufferSizeConstantName = "MaxBufferSize";
     /// <summary>Maximum buffer size (in chars) that may be allocated on the stack via <c>stackalloc</c>.</summary>
-    private const int StackallocThreshold = 256;
+    private const int MaxStackBufferSizeLimit = 1024;
 
     /// <inheritdoc />
     public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -86,6 +86,8 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         string? defaultFormat = GetNamedStringArgument(context.Attributes[0], "DefaultFormat");
         bool allowNullFormatProvider = GetNamedBoolArgument(context.Attributes[0], "AllowNullFormatProvider", true);
         int attributeMaxBufferSize = GetNamedIntArgument(context.Attributes[0], "MaxBufferSize");
+        bool hasAttributeMaxStackBufferSize = HasNamedArgument(context.Attributes[0], "MaxStackBufferSize");
+        int maxStackBufferSize = GetNamedIntArgument(context.Attributes[0], "MaxStackBufferSize", 256);
 
         bool hasTryFormat = HasTryFormatCharProvider(typeSymbol);
         bool hasTryFormatCharFormatOnly = HasTryFormatCharFormatOnly(typeSymbol);
@@ -127,6 +129,8 @@ public sealed class FormattableGenerator : IIncrementalGenerator
             allowNullFormatProvider,
             hasMaxBufferSizeConstant,
             maxBufferSizeConstantValue,
+            hasAttributeMaxStackBufferSize,
+            maxStackBufferSize,
             hasTryFormatUtf8Provider,
             hasTryFormatUtf8FormatOnly,
             hasTryFormatUtf8ProviderOnly,
@@ -173,7 +177,7 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         return null;
     }
 
-    private static int GetNamedIntArgument(AttributeData attribute, string name)
+    private static int GetNamedIntArgument(AttributeData attribute, string name, int defaultValue = 0)
     {
         foreach (var argument in attribute.NamedArguments)
         {
@@ -183,7 +187,20 @@ public sealed class FormattableGenerator : IIncrementalGenerator
             }
         }
 
-        return 0;
+        return defaultValue;
+    }
+
+    private static bool HasNamedArgument(AttributeData attribute, string name)
+    {
+        foreach (var argument in attribute.NamedArguments)
+        {
+            if (argument.Key == name)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static bool HasTryFormatCharProvider(INamedTypeSymbol typeSymbol)
@@ -427,6 +444,24 @@ public sealed class FormattableGenerator : IIncrementalGenerator
             return;
         }
 
+        if (target.HasAttributeMaxStackBufferSize)
+        {
+            int maximumAllowed = target.HasMaxBufferSizeConstant
+                ? Math.Min(MaxStackBufferSizeLimit, target.MaxBufferSizeConstantValue)
+                : MaxStackBufferSizeLimit;
+
+            if (target.MaxStackBufferSize <= 0 || target.MaxStackBufferSize > maximumAllowed)
+            {
+                context.ReportDiagnostic(Diagnostic.Create(
+                    DiagnosticDescriptors.InvalidMaxStackBufferSize,
+                    target.Location,
+                    target.TypeName,
+                    maximumAllowed,
+                    target.MaxStackBufferSize));
+                return;
+            }
+        }
+
         if (target.IsStatic)
         {
             context.ReportDiagnostic(Diagnostic.Create(
@@ -623,7 +658,7 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IFormattable, System
     public string ToString(string? format, System.IFormatProvider? provider)
     {
 {{providerGuard}}        int maxBufferSize = {{target.MaxBufferSizeConstantValue}};
-        if (maxBufferSize <= {{StackallocThreshold}})
+        if (maxBufferSize <= {{target.MaxStackBufferSize}})
         {
             System.Span<char> stackBuffer = stackalloc char[maxBufferSize];
             if (!TryFormat(stackBuffer, out int charsWritten, format.AsSpan(), provider))
@@ -894,6 +929,8 @@ partial {{target.TypeKeyword}} {{target.TypeName}} : System.IFormattable, System
         bool AllowNullFormatProvider,
         bool HasMaxBufferSizeConstant,
         int MaxBufferSizeConstantValue,
+         bool HasAttributeMaxStackBufferSize,
+         int MaxStackBufferSize,
         bool HasExistingTryFormatUtf8Provider,
         bool HasExistingTryFormatUtf8FormatOnly,
         bool HasExistingTryFormatUtf8ProviderOnly,
