@@ -27,8 +27,4 @@
     <Project Path="tests/VoloGen.Formattable.Tests/VoloGen.Formattable.Tests.csproj" />
     <Project Path="tests/VoloGen.Parsable.Tests/VoloGen.Parsable.Tests.csproj" />
   </Folder>
-  <Folder Name="/examples/">
-    <Project Path="examples/VoloGen.Formattable.Examples/VoloGen.Formattable.Examples.csproj" />
-  </Folder>
 </Solution>
-

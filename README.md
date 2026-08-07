@@ -194,8 +194,8 @@ All diagnostics use the **VoloGen** category and are errors by default.
 ```
 VoloGen/
 +-- .github/                  # CI workflows, issue templates, Copilot instructions
-+-- examples/                 # End-to-end usage examples
-|   +-- VoloGen.Formattable.Examples/
++-- samples/                  # End-to-end usage examples
+|   +-- VoloGen.Samples.Formattable/
 +-- src/
 |   +-- VoloGen.Common/       # Shared diagnostics, helpers, localized .resx
 |   +-- VoloGen.Equality/     # [AutoEquality] attribute
@@ -243,10 +243,10 @@ dotnet test
 ### Run Samples
 
 ```bash
-dotnet run --project examples/VoloGen.Formattable.Examples
+dotnet run --project samples/VoloGen.Samples.Formattable
 ```
 
-The Formattable example demonstrates attribute-based `MaxBufferSize` and
+The Formattable sample demonstrates attribute-based `MaxBufferSize` and
 `MaxStackBufferSize`, the legacy `const int MaxBufferSize` fallback, generated
 `ToString` overloads, and `ISpanFormattable.TryFormat`.
 
@@ -286,5 +286,3 @@ and [StronglyTypedId](https://github.com/andrewlock/StronglyTypedId) by Andrew L
 ## License
 
 [MIT](LICENSE) -- Copyright (c) 2026 Oleksandr Tsvirkun
-
-
