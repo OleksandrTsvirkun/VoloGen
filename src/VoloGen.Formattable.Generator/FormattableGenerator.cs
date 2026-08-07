@@ -85,6 +85,7 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         bool implementUtf8 = GetNamedBoolArgument(context.Attributes[0], "ImplementUtf8");
         string? defaultFormat = GetNamedStringArgument(context.Attributes[0], "DefaultFormat");
         bool allowNullFormatProvider = GetNamedBoolArgument(context.Attributes[0], "AllowNullFormatProvider", true);
+        int attributeMaxBufferSize = GetNamedIntArgument(context.Attributes[0], "MaxBufferSize");
 
         bool hasTryFormat = HasTryFormatCharProvider(typeSymbol);
         bool hasTryFormatCharFormatOnly = HasTryFormatCharFormatOnly(typeSymbol);
@@ -99,6 +100,11 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         bool hasTryFormatUtf8ProviderOnly = HasTryFormatUtf8ProviderOnly(typeSymbol);
         bool hasTryFormatUtf8NoArgs = HasTryFormatUtf8NoArgs(typeSymbol);
         var (hasMaxBufferSizeConstant, maxBufferSizeConstantValue) = GetMaxBufferSizeConstant(typeSymbol);
+        if (attributeMaxBufferSize > 0)
+        {
+            hasMaxBufferSizeConstant = true;
+            maxBufferSizeConstantValue = attributeMaxBufferSize;
+        }
 
         var attributeLocation = context.Attributes[0].ApplicationSyntaxReference?.GetSyntax().GetLocation() ?? syntax.GetLocation();
 
@@ -165,6 +171,19 @@ public sealed class FormattableGenerator : IIncrementalGenerator
         }
 
         return null;
+    }
+
+    private static int GetNamedIntArgument(AttributeData attribute, string name)
+    {
+        foreach (var argument in attribute.NamedArguments)
+        {
+            if (argument.Key == name && argument.Value.Value is int value)
+            {
+                return value;
+            }
+        }
+
+        return 0;
     }
 
     private static bool HasTryFormatCharProvider(INamedTypeSymbol typeSymbol)

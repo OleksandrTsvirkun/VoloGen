@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 
@@ -832,6 +833,105 @@ public class FormattableGeneratorTests
         await test.RunAsync();
 
         Assert.True(true);
+    }
+
+    [Fact]
+    public async Task AttributeMaxBufferSize_AllowsMissingTypeConstant()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoFormattable(MaxBufferSize = 128)]
+            public partial struct AttributeSizedValue
+            {
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        string generatedSource = await RunGeneratorAsync(source);
+
+        Assert.Contains("int maxBufferSize = 128;", generatedSource);
+    }
+
+    [Fact]
+    public async Task AttributeMaxBufferSize_TakesPrecedenceOverTypeConstant()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoFormattable(MaxBufferSize = 4096)]
+            public partial struct AttributeSizedValue
+            {
+                private const int MaxBufferSize = 64;
+
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        string generatedSource = await RunGeneratorAsync(source);
+
+        Assert.Contains("int maxBufferSize = 4096;", generatedSource);
+        Assert.DoesNotContain("int maxBufferSize = 64;", generatedSource);
+    }
+
+    [Fact]
+    public async Task AttributeMaxBufferSize_DefaultsToTypeConstant()
+    {
+        string source = """
+            using System;
+            using VoloGen;
+
+            namespace TestNamespace;
+
+            [AutoFormattable(MaxBufferSize = 0)]
+            public partial struct LegacySizedValue
+            {
+                private const int MaxBufferSize = 64;
+
+                public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+                {
+                    charsWritten = 0;
+                    return true;
+                }
+            }
+            """;
+
+        string generatedSource = await RunGeneratorAsync(source);
+
+        Assert.Contains("int maxBufferSize = 64;", generatedSource);
+    }
+
+    private static async Task<string> RunGeneratorAsync(string source)
+    {
+        var references = await ReferenceAssemblies.Net.Net90.ResolveAsync(LanguageNames.CSharp, default);
+        var attributeReference = MetadataReference.CreateFromFile(typeof(AutoFormattableAttribute).Assembly.Location);
+
+        var compilation = CSharpCompilation.Create(
+            "TestAssembly",
+            [CSharpSyntaxTree.ParseText(source)],
+            [.. references, attributeReference],
+            new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
+
+        var generator = new FormattableGenerator();
+        var driver = CSharpGeneratorDriver.Create(generator).RunGenerators(compilation);
+        var results = driver.GetRunResult();
+
+        Assert.NotEmpty(results.GeneratedTrees);
+        return (await results.GeneratedTrees[0].GetTextAsync()).ToString();
     }
 }
 

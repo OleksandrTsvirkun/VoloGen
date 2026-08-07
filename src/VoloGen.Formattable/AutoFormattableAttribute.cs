@@ -73,5 +73,13 @@ public sealed class AutoFormattableAttribute : Attribute
     /// <value><see langword="true"/> to allow null providers; <see langword="false"/> to enforce non-null providers.</value>
     public bool AllowNullFormatProvider { get; set; } = true;
 
+    /// <summary>
+    /// Gets or sets the maximum number of characters used by generated <c>ToString</c> buffers.
+    /// A positive value overrides the target type's <c>MaxBufferSize</c> constant.
+    /// Defaults to <c>0</c>, which uses the constant for backward compatibility.
+    /// </summary>
+    /// <value>A positive maximum buffer size, or <c>0</c> to use the target type's constant.</value>
+    public int MaxBufferSize { get; set; }
+
 }
 

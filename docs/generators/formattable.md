@@ -23,7 +23,7 @@ The annotated type **must**:
 - Define one core method:
   - `bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)` -- your formatting logic
 - Provide **one** of the following for `ToString` generation:
-  - `const int MaxBufferSize` -- the generator uses `stackalloc` / `ArrayPool<char>` to build the string
+  - A positive `MaxBufferSize` attribute property or `const int MaxBufferSize` -- the generator uses `stackalloc` / `ArrayPool<char>` to build the string
   - `string ToString(string?, IFormatProvider?)` -- your own conversion method
 
 ## Attribute Properties
@@ -33,6 +33,9 @@ The annotated type **must**:
 | `ImplementUtf8` | `bool` | `false` | Generate `IUtf8SpanFormattable` overloads |
 | `DefaultFormat` | `string?` | `null` | Default format string for formatless overloads |
 | `AllowNullFormatProvider` | `bool` | `true` | When `false`, generated overloads throw `ArgumentNullException` for null providers |
+| `MaxBufferSize` | `int` | `0` | Positive buffer size for generated `ToString`; `0` uses the target type's `const int MaxBufferSize` |
+
+`MaxBufferSize` specified on `AutoFormattable` takes precedence over the target type's constant. The constant remains supported for backward compatibility. A value of `0` means that the generator falls back to the constant.
 
 ## What Gets Generated
 
@@ -78,6 +81,36 @@ public partial struct Currency
     {
         return _value.TryFormat(destination, out charsWritten, format, provider);
     }
+}
+```
+
+### With Attribute MaxBufferSize
+
+The buffer size can be configured directly on the attribute, without declaring a constant on the target type:
+
+```csharp
+using VoloGen;
+
+[AutoFormattable(MaxBufferSize = 128)]
+public partial struct Currency
+{
+    private readonly decimal _value;
+
+    public bool TryFormat(Span<char> destination, out int charsWritten,
+        ReadOnlySpan<char> format, IFormatProvider? provider)
+    {
+        return _value.TryFormat(destination, out charsWritten, format, provider);
+    }
+}
+```
+
+If both the attribute property and the constant are present, the attribute value is used:
+
+```csharp
+[AutoFormattable(MaxBufferSize = 128)]
+public partial struct Currency
+{
+    private const int MaxBufferSize = 64; // Used only when the attribute value is 0.
 }
 ```
 
