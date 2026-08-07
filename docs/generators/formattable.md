@@ -195,3 +195,4 @@ Console.WriteLine($"Total: {price:N0}");        // "Total: 1,235"
 | [VG0003]({% link diagnostics.md %}#vg0003) | Type is `static` |
 | [VG0007]({% link diagnostics.md %}#vg0007) | Missing core `TryFormat` method |
 | [VG0008]({% link diagnostics.md %}#vg0008) | Missing both `ToString(string?, IFormatProvider?)` and `MaxBufferSize` |
+| [VG0009]({% link diagnostics.md %}#vg0009) | Invalid explicitly configured `MaxStackBufferSize` |
