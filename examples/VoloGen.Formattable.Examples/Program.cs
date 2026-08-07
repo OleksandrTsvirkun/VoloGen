@@ -34,7 +34,7 @@ Console.WriteLine();
 Console.WriteLine("UTF-8 formatting:");
 var utf8Amount = new Utf8Amount(987.65m);
 Span<byte> utf8Destination = stackalloc byte[64];
-if (utf8Amount.TryFormat(utf8Destination, out int bytesWritten, "N2", CultureInfo.InvariantCulture))
+if (utf8Amount.TryFormat(utf8Destination, out int bytesWritten, "N2".AsSpan(), CultureInfo.InvariantCulture))
 {
     Console.WriteLine(Encoding.UTF8.GetString(utf8Destination[..bytesWritten]));
 }
