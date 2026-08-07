@@ -21,9 +21,9 @@ namespace VoloGen.Formattable;
 /// </para>
 /// <para>
 /// <c>ToString</c> generation requires either a user-defined
-/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> a
-/// <c>const int MaxBufferSize</c> field; the latter enables an auto-generated stackalloc /
-/// <see cref="System.Buffers.ArrayPool{T}"/>-backed implementation.
+/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> a positive
+/// <c>MaxBufferSize</c> attribute property or <c>const int MaxBufferSize</c> field; the latter
+/// options enable an auto-generated stackalloc / <see cref="System.Buffers.ArrayPool{T}"/>-backed implementation.
 /// </para>
 /// </remarks>
 [Generator(LanguageNames.CSharp)]

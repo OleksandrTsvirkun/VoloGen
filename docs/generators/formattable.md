@@ -34,8 +34,11 @@ The annotated type **must**:
 | `DefaultFormat` | `string?` | `null` | Default format string for formatless overloads |
 | `AllowNullFormatProvider` | `bool` | `true` | When `false`, generated overloads throw `ArgumentNullException` for null providers |
 | `MaxBufferSize` | `int` | `0` | Positive buffer size for generated `ToString`; `0` uses the target type's `const int MaxBufferSize` |
+| `MaxStackBufferSize` | `int` | `256` | Maximum buffer size for generated `stackalloc`; must be no greater than `1024` and the effective `MaxBufferSize` |
 
 `MaxBufferSize` specified on `AutoFormattable` takes precedence over the target type's constant. The constant remains supported for backward compatibility. A value of `0` means that the generator falls back to the constant.
+
+`MaxStackBufferSize` controls when generated `ToString` uses `stackalloc` instead of `ArrayPool<char>`. Its default is `256`, preserving the previous behavior. When the property is explicitly set, it must be greater than `0`, no greater than `1024`, and no greater than the effective `MaxBufferSize`.
 
 ## What Gets Generated
 
@@ -142,11 +145,12 @@ public partial struct Percentage
 ```csharp
 using VoloGen;
 
-[AutoFormattable(ImplementUtf8 = true, DefaultFormat = "C", AllowNullFormatProvider = false)]
+[AutoFormattable(ImplementUtf8 = true, DefaultFormat = "C", AllowNullFormatProvider = false,
+   MaxBufferSize = 256, MaxStackBufferSize = 256)]
 public partial struct Money
 {
     private readonly decimal _amount;
-    public const int MaxBufferSize = 128;
+    public const int MaxBufferSize = 256;
 
     public bool TryFormat(Span<char> destination, out int charsWritten,
         ReadOnlySpan<char> format, IFormatProvider? provider)

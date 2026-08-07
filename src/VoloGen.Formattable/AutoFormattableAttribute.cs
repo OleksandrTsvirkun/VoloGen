@@ -18,9 +18,9 @@
 /// </para>
 /// <para>
 /// For <c>ToString</c> generation the type must either supply its own
-/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> declare a
-/// <c>const int MaxBufferSize</c> field so the generator can produce a
-/// stackalloc / <c>ArrayPool&lt;char&gt;</c>-backed implementation.
+/// <c>string ToString(string?, IFormatProvider?)</c> method <b>or</b> provide a positive
+/// <c>MaxBufferSize</c> attribute property or <c>const int MaxBufferSize</c> field so the
+/// generator can produce a stackalloc / <c>ArrayPool&lt;char&gt;</c>-backed implementation.
 /// </para>
 /// <para>
 /// When <see cref="ImplementUtf8"/> is <see langword="true"/>, the generator additionally emits

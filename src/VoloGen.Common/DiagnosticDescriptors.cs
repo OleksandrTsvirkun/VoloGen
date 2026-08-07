@@ -123,8 +123,9 @@ public static class DiagnosticDescriptors
 
     /// <summary>
     /// <b>VG0008</b> — The type is annotated with <c>[AutoFormattable]</c> but defines neither
-    /// <c>string ToString(string?, IFormatProvider?)</c> nor a <c>const int MaxBufferSize</c> field.
-    /// At least one is required to generate <c>ToString</c> overloads.
+    /// <c>string ToString(string?, IFormatProvider?)</c> nor a positive <c>MaxBufferSize</c>
+    /// attribute property or <c>const int MaxBufferSize</c> field. At least one is required
+    /// to generate <c>ToString</c> overloads.
     /// </summary>
     public static readonly DiagnosticDescriptor MissingToStringOrMaxBufferSize = new(
         id: "VG0008",

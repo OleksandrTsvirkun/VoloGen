@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
     <xsd:element name="root" msdata:IsDataSet="true">
@@ -123,10 +123,10 @@
     <value>Відсутні ToString або MaxBufferSize</value>
   </data>
   <data name="VG0008_MessageFormat" xml:space="preserve">
-    <value>Тип '{0}' позначений атрибутом [AutoFormattable], але не визначає 'string ToString(string?, IFormatProvider?)' та не має поля 'const int MaxBufferSize'</value>
+    <value>Тип '{0}' позначений атрибутом [AutoFormattable], але не визначає 'string ToString(string?, IFormatProvider?)' та не має додатної властивості атрибута 'MaxBufferSize' або поля 'const int MaxBufferSize'</value>
   </data>
   <data name="VG0008_Description" xml:space="preserve">
-    <value>Атрибут [AutoFormattable] вимагає або визначеного користувачем методу 'string ToString(string?, IFormatProvider?)', або поля 'const int MaxBufferSize' для генерації перевантаження ToString з використанням stackalloc або ArrayPool.</value>
+    <value>Атрибут [AutoFormattable] вимагає визначеного користувачем методу 'string ToString(string?, IFormatProvider?)', додатної властивості атрибута 'MaxBufferSize' або поля 'const int MaxBufferSize' для генерації перевантаження ToString з використанням stackalloc або ArrayPool.</value>
   </data>
 
   <!-- Exception messages -->
